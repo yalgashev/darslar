@@ -1,0 +1,932 @@
+<!doctype html><html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Kubernetes masshtablash, mavjudlik va o‘z-o‘zini tiklash bo‘yicha 20 slaydli, 8 interaktiv namoyishli taqdimot"><title>M13 · Interaktiv taqdimot</title><script>(() => {
+  const key = 'm13-reader-preferences-v1';
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (_) {}
+  const explicitTheme = saved.theme === 'dark' || saved.theme === 'light';
+  const theme = explicitTheme ? saved.theme : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const scale = Number.isFinite(Number(saved.scale)) ? Math.round(Math.min(1.4, Math.max(0.8, Number(saved.scale))) * 10) / 10 : 1;
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.style.setProperty('--text-scale', String(scale));
+  window.M13Reader = { key, theme, scale, explicitTheme };
+})();
+</script><style>:root{--ink:#18343e;--muted:#52636b;--accent:#087c77;--line:#d7e2e3;--paper:#fff;--bg:#f5f7f6;--soft:#edf4f4;--danger:#b3323d;--good:#176747;--warn:#8b5c11;color-scheme:light;font-family:'Segoe UI',Arial,sans-serif;color:var(--ink);background:var(--bg);scroll-behavior:smooth;scroll-padding-top:30px}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button,a,input,select,summary{touch-action:manipulation}button{cursor:pointer;min-height:42px;border:1px solid #b9cccf;border-radius:8px;padding:9px 14px;background:#fff;color:var(--ink);font-size:0.875rem;font-weight:600;transition:background .15s,transform .15s}button:hover{background:#eaf2f2}button:active{transform:translateY(1px)}button:disabled{cursor:not-allowed;opacity:.5}button.primary{color:white;background:var(--accent);border-color:var(--accent)}button.primary:hover{background:#06645f}button.danger{color:var(--danger);border-color:#d6a8ae;background:#fff6f7}button[aria-pressed=true]{background:#daeaea;border-color:var(--accent)}a{color:#08736f;text-underline-offset:3px}a:hover{color:#054f4b}:focus-visible{outline:3px solid #d18c24;outline-offset:4px}.skip{position:fixed;top:-100px;left:20px;background:#fff;padding:14px;z-index:100}.skip:focus{top:12px}
+.layout{max-width:1510px;margin:auto;display:grid;grid-template-columns:250px minmax(0,1fr);gap:60px;padding:0 50px 90px 30px}.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;padding:37px 18px 30px 8px;border-right:1px solid var(--line)}.brand{font-size:0.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:25px}.module-no{font-size:3.125rem;font-weight:300;letter-spacing:-.07em;line-height:1;color:var(--ink)}.sidebar p{font-size:0.8125rem;line-height:1.5;color:var(--muted);margin:10px 0 25px}.toc{display:grid;gap:3px}.toc a{display:flex;gap:12px;font-size:0.8125rem;line-height:1.45;text-decoration:none;padding:10px 9px;color:var(--muted);border-radius:6px}.toc a span{font-variant-numeric:tabular-nums;color:#789095;min-width:20px}.toc a.active{color:var(--accent);background:#e5efee;font-weight:600}.toc a:hover{background:#ebf0ef}.sidebar-foot{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);font-size:0.75rem;line-height:1.6;color:var(--muted)}main{min-width:0;max-width:1040px}.topline{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:34px 0 25px;font-size:0.75rem;color:var(--muted);letter-spacing:.04em}.topline button{min-height:34px;padding:6px 11px;font-size:0.75rem}.hero{padding:27px 0 38px;border-bottom:1px solid var(--line)}.eyebrow{font-size:0.6875rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}h1{font:400 clamp(2.1875rem,4vw,3.5625rem)/1.12 Georgia,'Times New Roman',serif;letter-spacing:-.025em;max-width:840px;margin:18px 0 24px}.hero-question{font:1.375rem/1.6 Georgia,'Times New Roman',serif;max-width:760px;color:#3c555e;margin:0 0 22px}.meta{display:flex;flex-wrap:wrap;gap:9px}.meta span{font-size:0.75rem;background:#e8f0ee;padding:7px 11px;border-radius:5px;color:#315b5c}.reader-intro{padding:24px 0;font-size:0.875rem;line-height:1.75;color:var(--muted)}.reader-intro strong{color:var(--ink)}.lecture-section{padding:33px 0 38px;border-bottom:1px solid var(--line);scroll-margin-top:12px}h2{font:400 2rem/1.25 Georgia,'Times New Roman',serif;letter-spacing:-.02em;margin:0 0 23px}h3{font-size:1.1875rem;line-height:1.45;margin:28px 0 12px;font-weight:650}.prose{font:1.125rem/1.85 Georgia,'Times New Roman',serif;margin:0 0 17px;max-width:850px}.prose strong{font-weight:700}.lead-label{font-family:'Segoe UI',Arial,sans-serif;font-weight:650;font-size:0.9375rem}.intro-block{padding-top:6px}.caption{font-size:0.8125rem;font-weight:600;margin:21px 0 9px;color:#425e68}.table-wrap{overflow-x:auto;margin:8px 0 23px;border:1px solid var(--line);border-radius:8px}table{width:100%;border-collapse:collapse;font-size:0.875rem;line-height:1.65}th{text-align:left;background:#eaf1f1;color:#264d57;font-weight:650}th,td{padding:12px 15px;border-bottom:1px solid #dce5e6;vertical-align:top}td+td,th+th{border-left:1px solid #e4ebeb}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#f8faf9}pre{overflow-x:auto;padding:20px 24px;border-radius:10px;background:#152f39;color:#e5f2f1;font:0.875rem/1.7 Consolas,'Cascadia Code',monospace;tab-size:2;margin:20px 0;white-space:pre}code{font-family:Consolas,'Cascadia Code',monospace}.prose code{font-size:.85em;background:#eaf1f1;padding:2px 5px;border-radius:3px}.original-figure{border:1px solid var(--line);border-radius:8px;padding:12px 15px;margin:20px 0 4px;background:#fff}.original-figure summary{font-size:0.8125rem;color:var(--muted);cursor:pointer;font-weight:600}.original-figure img{display:block;max-width:100%;height:auto;margin-top:15px;border-radius:4px}.reference{font:0.875rem/1.75 'Segoe UI',Arial,sans-serif;margin:12px 0;overflow-wrap:anywhere}.reference a{display:inline}.question{font:1.0625rem/1.7 Georgia,serif;margin:0 0 13px}.review-hint{padding:16px 20px;background:#eaf2ef;border-left:3px solid var(--accent);font:0.9375rem/1.7 'Segoe UI',sans-serif;margin:18px 0}
+.lab{margin:34px 0 8px;border:1px solid #bdd4d4;background:#fff;border-radius:14px;overflow:hidden;font:0.875rem/1.6 'Segoe UI',Arial,sans-serif;box-shadow:0 7px 25px #173b4206}.lab-top{padding:20px 24px;background:#eaf3f2;border-bottom:1px solid #cfe0df}.lab-kicker{font-size:0.6875rem;letter-spacing:.12em;font-weight:700;color:var(--accent);text-transform:uppercase}.lab-top h3{font-size:1.375rem;margin:5px 0 7px;line-height:1.3}.lab-top p{font-size:0.875rem;line-height:1.65;color:#435f67;margin:0;max-width:850px}.demo-root{padding:22px 24px}.demo-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin:0 0 20px;align-items:start}.control{display:flex;flex-direction:column;gap:7px;color:#38545f;font-size:0.8125rem;font-weight:600;min-width:0}.control label{display:block}.control input[type=range],input[type=range]{accent-color:var(--accent);width:100%;height:24px;cursor:pointer}.control input[type=number],.control select,select,input[type=number]{width:100%;border:1px solid #b9cbce;border-radius:6px;background:#fff;color:var(--ink);padding:8px;min-height:39px}.control input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}.control output,output{font-variant-numeric:tabular-nums;font-weight:650;color:var(--ink)}.button-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:15px 0}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:12px;margin:18px 0}.metric{padding:11px 14px;background:#f0f5f4;border-radius:7px;min-width:0}.metric strong{display:block;font-size:1.5rem;line-height:1.25;font-weight:650;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.metric span{display:block;margin-top:4px;color:#46616b;font-size:0.75rem}.scene{padding:20px;background:#f5f8f7;border:1px solid #dfe8e6;border-radius:10px;margin:18px 0;overflow:hidden;min-width:0}.node-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:13px}.node{border:1px solid #bfd3d4;border-radius:9px;background:#fff;padding:13px;min-width:0}.node-head{font-size:0.8125rem;font-weight:650;margin-bottom:10px;display:flex;justify-content:space-between;gap:8px}.node.failed{border-color:#d6a1a6;background:#fff4f4}.node.off{opacity:.6}.pod-list{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.pod{padding:10px 12px;border:1px solid #cad7da;background:#eef2f3;border-radius:7px;font-size:0.75rem;line-height:1.5;min-width:70px;text-align:center;transition:background .25s,opacity .25s,transform .25s}.pod.ready{border-color:#9acdb4;background:#e4f4eb;color:#155a3d}.pod.pending{border-color:#dfc895;background:#fff2d7;color:#785115}.pod.starting{border-color:#a7c7da;background:#e7f2f8;color:#235c7b}.pod.failed{border-color:#dfadb2;background:#fcebed;color:#9b2734}.pod.off{background:#ebedef;color:#6b757c;opacity:.7}.status{padding:12px 15px;margin:14px 0;border-left:3px solid var(--accent);background:#edf5f3;border-radius:0 6px 6px 0;line-height:1.65;color:#274d54;overflow-wrap:anywhere}.note{font-size:0.75rem;color:#536972;line-height:1.75;margin:12px 0}.formula{font-family:Consolas,monospace;background:#edf4f4;padding:13px 16px;border-radius:7px;font-size:0.875rem;line-height:1.7;overflow-wrap:anywhere}.event-log{background:#f6f8f7;border:1px solid #e0e8e7;border-radius:7px;margin:15px 0 0;padding:14px 18px 14px 36px;max-height:230px;overflow:auto;font-size:0.75rem;line-height:1.9}.event-log li{padding:2px 0}.event-log:empty{display:none}.mini-table{font-size:0.75rem}.bar-track{height:10px;background:#e1e9e7;border-radius:5px;overflow:hidden;margin:7px 0}.bar-fill{height:100%;background:var(--accent);transition:width .3s}.task{padding:16px 24px;border-top:1px solid #d8e5e3;background:#f8faf9;font-size:0.8125rem;line-height:1.7;color:#345862}.task strong{color:var(--accent)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.service-label{display:block;text-align:center;padding:10px;margin:0 auto 15px;max-width:200px;border-radius:7px;background:#dceceb;font-weight:650}.arrow{text-align:center;color:#63818a;font-size:1.375rem;margin:5px}.traffic-flow{height:5px;background:repeating-linear-gradient(90deg,#0c8278 0,#0c8278 8px,transparent 8px,transparent 15px);background-size:30px 5px;animation:flow 1s linear infinite;margin:12px 0}.is-paused .traffic-flow{animation-play-state:paused}@keyframes flow{to{background-position:30px 0}}.footer{padding:30px 0;font-size:0.75rem;line-height:1.8;color:var(--muted)}.scroll-top{position:fixed;right:22px;bottom:22px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:white;border:0;z-index:5}.mobile-nav{display:none}.progress{position:fixed;left:0;top:0;height:3px;background:var(--accent);z-index:80;width:0}
+@media(min-width:1450px){.layout{gap:75px}}@media(max-width:1100px){.layout{grid-template-columns:210px minmax(0,1fr);gap:30px;padding:0 25px}.sidebar{padding-right:12px}.prose{font-size:1.0625rem}.demo-root{padding:20px}.lab-top{padding:18px 20px}.demo-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){:root{scroll-padding-top:70px}.layout{display:block;padding:0 20px}.sidebar{position:static;height:auto;border-right:0;padding:20px 0 0;overflow:visible}.brand{margin:0 0 10px}.module-no,.sidebar>p,.sidebar-foot{display:none}.mobile-nav{display:block;width:100%;margin:12px 0}.toc{display:none}.topline{padding:12px 0 10px}.hero{padding:24px 0 28px}h1{font-size:2.375rem}.hero-question{font-size:1.25rem}.lecture-section{padding:28px 0}h2{font-size:1.6875rem}h3{font-size:1.125rem}.prose{font-size:1.0625rem;line-height:1.8}.lab-top{padding:17px}.lab-top h3{font-size:1.25rem}.demo-root{padding:17px}.demo-controls{gap:14px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:10px}.metric strong{font-size:1.375rem}.scene{padding:14px}.node-grid{grid-template-columns:1fr}.task{padding:14px 17px}table{font-size:0.8125rem}th,td{padding:10px}pre{font-size:0.75rem;padding:16px}.scroll-top{right:14px;bottom:14px}.button-row button{font-size:0.8125rem;padding:8px 11px}.demo-root svg{max-width:100%}}
+@media(max-width:400px){.layout{padding:0 12px}.demo-controls{grid-template-columns:1fr}h1{font-size:2.0625rem}.demo-root{padding:14px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+@media print{body{background:#fff}.layout{display:block;padding:0}.sidebar,.topline,.progress,.scroll-top,.reader-intro{display:none}.hero{padding-top:0}h1{font-size:2.25rem}.lecture-section{break-inside:auto}.lab{break-inside:avoid;box-shadow:none}.button-row,.demo-controls{display:none}.event-log{max-height:none}.prose{font-size:12pt}details.original-figure{display:none}pre{white-space:pre-wrap;color:#111;background:#eee}.lab-top{background:#eee}a{color:#222}.footer{font-size:9pt}}
+.pod strong,.pod span,.pod small{display:block}.pod small{font-size:0.6875rem;margin-top:4px;color:inherit;opacity:.85}.scene h4{font-size:0.9375rem;margin:0 0 16px}.cite{font-family:Segoe UI,Arial,sans-serif;font-size:0.75rem;text-decoration:none;white-space:nowrap}.lab .table-wrap{margin-top:15px}
+
+/* Screen-only overrides preserve the light palette when printing. */
+@media screen {
+  :root[data-theme="dark"] {
+    --ink:#e2edf0;
+    --muted:#afc2c9;
+    --accent:#73d7ca;
+    --line:#3b515b;
+    --paper:#192d37;
+    --bg:#101e26;
+    --soft:#233b46;
+    --danger:#ffb8c1;
+    --good:#a6dfc0;
+    --warn:#f3d59a;
+    color-scheme:dark;
+    color:var(--ink);
+    background:var(--bg);
+  }
+  :root[data-theme="dark"] body {background:var(--bg);color:var(--ink)}
+  :root[data-theme="dark"] button,
+  :root[data-theme="dark"] select,
+  :root[data-theme="dark"] input[type="number"],
+  :root[data-theme="dark"] .control select,
+  :root[data-theme="dark"] .control input[type="number"] {
+    color:var(--ink);background:#203641;border-color:#58717d;
+  }
+  :root[data-theme="dark"] select option {color:var(--ink);background:#203641}
+  :root[data-theme="dark"] button:hover {background:#2b4652}
+  :root[data-theme="dark"] button[aria-pressed="true"] {background:#2a5053;border-color:var(--accent)}
+  :root[data-theme="dark"] button.primary,
+  :root[data-theme="dark"] button.primary[aria-pressed="true"] {color:#102e2c;background:#73d7ca;border-color:#73d7ca}
+  :root[data-theme="dark"] button.primary:hover {background:#92e3d9;border-color:#92e3d9}
+  :root[data-theme="dark"] button.danger {color:#ffbdc6;border-color:#a66c78;background:#402c36}
+  :root[data-theme="dark"] button.danger:hover,
+  :root[data-theme="dark"] button.danger[aria-pressed="true"] {color:#ffd3da;background:#593541;border-color:#c18d96}
+  :root[data-theme="dark"] a {color:#82dfd2}
+  :root[data-theme="dark"] a:hover {color:#c2f4ec}
+  :root[data-theme="dark"] :focus-visible {outline-color:#f2cd79}
+  :root[data-theme="dark"] .skip {background:var(--paper);color:#b5f0e7}
+  :root[data-theme="dark"] .toc a {color:var(--muted)}
+  :root[data-theme="dark"] .toc a span {color:#9db6c0}
+  :root[data-theme="dark"] .toc a.active {color:#a8f0e5;background:#214044}
+  :root[data-theme="dark"] .toc a:hover {color:var(--ink);background:#203640}
+  :root[data-theme="dark"] .hero-question {color:#c6d9df}
+  :root[data-theme="dark"] .meta span {color:#b7e0dc;background:#203b42}
+  :root[data-theme="dark"] .caption {color:#b4ccd4}
+  :root[data-theme="dark"] th {background:#263e49;color:#e0edf1}
+  :root[data-theme="dark"] th,
+  :root[data-theme="dark"] td {border-color:#3b515b}
+  :root[data-theme="dark"] td+td,
+  :root[data-theme="dark"] th+th {border-left-color:#3b515b}
+  :root[data-theme="dark"] tbody tr:nth-child(even) {background:#1d333d}
+  :root[data-theme="dark"] pre {background:#0c1921;color:#dceceb}
+  :root[data-theme="dark"] .prose code {background:#263e49;color:#e1eeef}
+  :root[data-theme="dark"] .original-figure {background:#192d37;border-color:var(--line)}
+  :root[data-theme="dark"] .original-figure img {background:#fff}
+  :root[data-theme="dark"] .review-hint {color:#d5e7e9;background:#203b3e}
+  :root[data-theme="dark"] .lab {background:#172a34;border-color:#3e5f68;box-shadow:none}
+  :root[data-theme="dark"] .lab-top {background:#203b43;border-color:#3f5961}
+  :root[data-theme="dark"] .lab-top p,
+  :root[data-theme="dark"] .control {color:#bed2da}
+  :root[data-theme="dark"] .metric {background:#243d47}
+  :root[data-theme="dark"] .metric span {color:#b7cdd4}
+  :root[data-theme="dark"] .scene {background:#13242d;border-color:#3a515a}
+  :root[data-theme="dark"] .node {background:#1b313c;border-color:#4a6570}
+  :root[data-theme="dark"] .node.failed {background:#392832;border-color:#95616e}
+  :root[data-theme="dark"] .node.off {opacity:1;background:#26343e;color:#b8c8ce}
+  :root[data-theme="dark"] .pod {color:#d8e7ec;background:#2a3f49;border-color:#58717b}
+  :root[data-theme="dark"] .pod.ready {color:#b8eed2;background:#1b4135;border-color:#54816d}
+  :root[data-theme="dark"] .pod.pending {color:#f3dba4;background:#443820;border-color:#9c824c}
+  :root[data-theme="dark"] .pod.starting {color:#c0e4f7;background:#203e53;border-color:#5c829b}
+  :root[data-theme="dark"] .pod.failed {color:#ffc4ce;background:#4c2d37;border-color:#a16c79}
+  :root[data-theme="dark"] .pod.off {color:#c3d1d7;background:#2a3943;border-color:#61737b;opacity:1}
+  :root[data-theme="dark"] .status {color:#d2ece9;background:#234044}
+  :root[data-theme="dark"] .note {color:#b7cbd3}
+  :root[data-theme="dark"] .formula {color:#e1edef;background:#223c46}
+  :root[data-theme="dark"] .event-log {color:#cbdee4;background:#14262f;border-color:#405762}
+  :root[data-theme="dark"] .bar-track {background:#3c525c}
+  :root[data-theme="dark"] .task {color:#c8e0e4;background:#1e343e;border-color:#3f5862}
+  :root[data-theme="dark"] .service-label {background:#24474b;color:#e3f0ef}
+  :root[data-theme="dark"] .arrow {color:#adc7cf}
+  :root[data-theme="dark"] .traffic-flow {background-image:repeating-linear-gradient(90deg,#73d7ca 0,#73d7ca 8px,transparent 8px,transparent 15px)}
+  :root[data-theme="dark"] .scroll-top {color:#15312f;background:#a8e4dc}
+  :root[data-theme="dark"] .font-percent {color:#d6e8ed}
+  :root[data-theme="dark"] .font-tools {border-color:#58717d;background:#1a303b}
+  :root[data-theme="dark"] .m13-probe-demo .probe-tick {background:#2a404b;color:#e2edf0}
+  :root[data-theme="dark"] .m13-probe-demo .probe-tick.ok {background:#1b4135;color:#b8eed2}
+  :root[data-theme="dark"] .m13-probe-demo .probe-tick.bad {background:#4c2d37;color:#ffc4ce}
+}
+
+/* A local, viewport-filling slide surface. Demo bodies may scroll independently. */
+.deck-mode{height:100vh;height:100dvh;overflow:hidden;background:var(--bg);color:var(--ink)}
+.deck-mode .deck-toolbar{position:fixed;inset:0 0 auto;z-index:1000;display:flex;align-items:center;flex-wrap:wrap;gap:10px 15px;padding:12px 22px;background:var(--paper);border-bottom:1px solid var(--line);box-shadow:0 3px 15px #00000008}
+.deck-brand{flex:0 0 auto;display:flex;gap:9px;align-items:center;color:var(--ink);font-size:0.8125rem;font-weight:650;text-decoration:none;line-height:1.35;max-width:180px}
+.deck-brand strong{font-size:1.5rem;line-height:1;font-weight:400;letter-spacing:-.06em;color:var(--accent)}
+.deck-brand span{display:block;font-size:0.6875rem;color:var(--muted)}
+.deck-navigation{display:flex;align-items:center;gap:7px;flex:1 1 280px;min-width:0}
+.deck-navigation button{min-width:36px;min-height:36px;padding:6px 9px;font-size:1.0625rem}
+.deck-navigation select{min-width:120px;max-width:280px;flex:1 1 150px;font-size:0.75rem;padding:8px;min-height:36px}
+#slide-counter{flex:0 0 auto;min-width:48px;text-align:center;font-size:0.75rem;font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.deck-toolbar .reader-tools{display:flex;align-items:center;flex-wrap:wrap;gap:7px;flex:0 0 auto}
+.deck-toolbar .font-tools{display:flex;align-items:center;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--paper)}
+.deck-toolbar .font-tools button{min-width:31px;min-height:34px;padding:6px 8px;border:0;border-radius:0;background:transparent;color:var(--ink);font-size:0.75rem}
+.deck-toolbar .font-tools .font-percent{min-width:48px;font-variant-numeric:tabular-nums;border-inline:1px solid var(--line)}
+.deck-toolbar .font-tools button:hover{background:var(--soft)}
+.deck-toolbar .font-tools button:focus-visible{outline-offset:-3px}
+.deck-toolbar .theme-toggle{display:flex;align-items:center;justify-content:center;gap:5px;font-size:0.75rem;min-height:36px;padding:7px 10px;white-space:nowrap}
+.deck-toolbar .theme-toggle span{font-size:1rem;line-height:1}
+.deck-actions{display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+.deck-actions button,.deck-actions a{font-size:0.75rem;min-height:36px;padding:7px 10px;white-space:nowrap}
+.deck-actions a{display:inline-flex;align-items:center;text-decoration:none;border:1px solid var(--line);border-radius:7px;color:var(--ink)}
+.deck-actions a:hover{background:var(--soft)}
+.deck-mode .deck-stage{position:fixed;inset:var(--deck-header-height,90px) 0 36px;max-width:none;min-width:0;overflow:hidden}
+.deck-mode .slide{height:100%;width:100%;min-width:0;position:relative;overflow:hidden}
+.deck-mode .slide[hidden]{display:none!important}
+.slide .slide-scroll{height:100%;width:100%;max-width:1360px;margin:0 auto;padding:36px 56px 40px;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;scroll-behavior:smooth;outline:none}
+.slide-kicker{font-size:0.75rem;font-weight:650;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);margin:0 0 15px}
+.slide-heading{max-width:1160px;margin:0 0 23px}
+.slide-heading h1,.slide-heading h2{font-family:Georgia,'Times New Roman',serif;font-size:2.75rem;line-height:1.14;font-weight:400;letter-spacing:-.025em;color:var(--ink);max-width:1160px;margin:0}
+.slide-lead{font-family:Georgia,'Times New Roman',serif;font-size:1.5625rem;line-height:1.6;color:var(--muted);max-width:1050px;margin:0 0 28px}
+.slide-points{font-size:1.5rem;line-height:1.65;margin:0 0 25px;padding-left:29px;max-width:1080px}
+.slide-points li{padding-left:5px;margin:0 0 14px}
+.slide-points li::marker{color:var(--accent)}
+.slide-columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:32px;margin:30px 0}
+.concept-column{padding:0 0 0 23px;border-left:2px solid var(--line);min-width:0}
+.concept-column:first-child{border-left-color:var(--accent)}
+.concept-column h3{font-size:1.4375rem;line-height:1.35;color:var(--accent);margin:0 0 15px;font-weight:650}
+.concept-column p,.concept-column ul{font-size:1.3125rem;line-height:1.7;margin:0 0 15px}
+.concept-column ul{padding-left:23px}
+.concept-column li{margin-bottom:9px;padding-left:2px}
+.flow-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:26px;margin:36px 0 28px;align-items:start}
+.flow-step{position:relative;border-top:2px solid var(--line);padding-top:15px;min-width:0}
+.flow-step:not(:last-child)::after{content:'›';position:absolute;right:-19px;top:16px;font-size:1.625rem;color:var(--muted);line-height:1}
+.flow-index{font-size:0.8125rem;line-height:1.3;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:650;display:block;margin-bottom:13px}
+.flow-label{font-size:1.3125rem;font-weight:650;line-height:1.4;display:block;margin-bottom:10px;overflow-wrap:anywhere}
+.flow-detail{font-size:1.0625rem;line-height:1.65;color:var(--muted);display:block;overflow-wrap:anywhere}
+.slide-equation{font-family:Consolas,'Cascadia Code',monospace;font-size:1.8125rem;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--soft);padding:23px 28px;border-radius:10px;margin:25px 0 29px;max-width:1100px;color:var(--ink)}
+.slide-task,.slide-takeaway{font-size:1.1875rem;line-height:1.7;padding-top:18px;margin:26px 0 0;border-top:1px solid var(--line);color:var(--muted);max-width:1130px}
+.slide-task strong,.slide-takeaway strong{color:var(--accent);font-weight:650}
+.cover-slide .slide-scroll{display:flex;flex-direction:column;justify-content:center;min-height:100%;padding-top:38px;padding-bottom:44px}
+.cover-slide .slide-heading h1{font-size:3.625rem;line-height:1.1;max-width:1150px}
+.cover-slide .slide-lead{font-size:1.6875rem;line-height:1.6;max-width:1000px;margin-top:3px}
+.cover-slide .slide-kicker{margin-bottom:24px}
+.cover-visual{display:flex;gap:17px;align-items:center;justify-content:flex-start;flex-wrap:wrap;margin:20px 0 7px;color:var(--accent)}
+.cover-visual svg{display:block;width:100%;max-width:850px;height:auto;max-height:210px;color:var(--accent)}
+.cover-metrics{display:flex;gap:30px;flex-wrap:wrap;margin:20px 0 0;padding-top:20px;border-top:1px solid var(--line);font-size:1rem;color:var(--muted)}
+.cover-metrics strong{font-size:1.375rem;font-weight:650;color:var(--ink);margin-right:7px}
+.speaker-notes{display:none;font-size:0.9375rem;line-height:1.75;padding:17px 20px;margin:25px 0 0;background:var(--soft);border-left:3px solid var(--accent);color:var(--muted);max-width:1130px}
+.speaker-notes strong{display:block;color:var(--ink);font-size:0.75rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.notes-visible .speaker-notes{display:block}
+.speaker-notes:not([hidden]){display:block}
+.speaker-notes[hidden]{display:none!important}
+.demo-slide .slide-scroll{padding-top:25px;padding-bottom:28px}
+.demo-slide .slide-heading{margin-bottom:14px}
+.demo-slide .slide-heading h2{font-size:2.1875rem}
+.demo-slide .slide-kicker{margin-bottom:10px}
+.demo-slide .slide-lead{font:1.125rem/1.65 'Segoe UI',Arial,sans-serif;max-width:1100px;margin-bottom:15px}
+.demo-slide .demo-root{padding:20px 22px;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 20px #00000004;min-width:0;font-size:0.875rem;line-height:1.6}
+.demo-slide .demo-controls{grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin-bottom:16px}
+.demo-slide .scene{padding:17px;margin:15px 0}
+.demo-slide .button-row{margin:12px 0}
+.demo-slide .metrics{margin:15px 0}
+.demo-slide .metric{padding:10px 13px}
+.demo-slide .metric strong{font-size:1.5625rem}
+.demo-slide .event-log{max-height:180px}
+.demo-slide .slide-task{font-size:0.9375rem;margin-top:18px;padding-top:14px}
+.demo-slide .node-head{flex-wrap:wrap;overflow-wrap:anywhere}
+.demo-slide .task{margin:14px 0 0;border:1px solid var(--line);border-radius:6px}
+.deck-footer{height:36px;position:fixed;inset:auto 0 0;z-index:1001;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:0 22px;background:var(--paper);border-top:1px solid var(--line);font-size:0.6875rem;color:var(--muted);white-space:nowrap;overflow:hidden}
+.deck-footer a{color:var(--muted);text-decoration:none}
+.deck-footer kbd{font:0.6875rem 'Segoe UI',Arial,sans-serif;display:inline-block;padding:0 4px;color:var(--ink)}
+.deck-progress-track{height:3px;position:fixed;bottom:0;left:0;right:0;z-index:1002;background:var(--line);pointer-events:none}
+#deck-progress{height:100%;background:var(--accent);transition:width .2s ease;width:5%}
+#overview-dialog{width:min(1140px,calc(100vw - 40px));max-height:calc(100dvh - 44px);margin:auto;padding:27px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:14px;overflow:auto;box-shadow:0 20px 80px #00000038}
+#overview-dialog::backdrop{background:#06161dcc;backdrop-filter:blur(4px)}
+#overview-dialog h2{font-size:1.875rem;margin:0 110px 24px 0;color:var(--ink)}
+#overview-dialog [data-close-overview]{position:sticky;top:0;float:right;font-size:0.8125rem;min-height:36px;padding:7px 12px;z-index:2;background:var(--paper);color:var(--ink);border-color:var(--line)}
+.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;clear:both}
+.overview-grid>button{display:flex;gap:13px;text-align:left;align-items:flex-start;min-height:85px;padding:16px;background:var(--bg);color:var(--ink);border-color:var(--line);font-size:0.875rem;line-height:1.5;font-weight:400}
+.overview-grid>button:hover{background:var(--soft)}
+.overview-grid>button[aria-current="true"],.overview-grid>button[aria-current="page"]{border-color:var(--accent);background:var(--soft)}
+.overview-number{font-size:0.75rem;font-variant-numeric:tabular-nums;font-weight:650;color:var(--accent);padding-top:2px;min-width:21px}
+.overview-title{font-size:0.9375rem;line-height:1.45;color:var(--ink)}
+.sources-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 35px;margin-top:25px}
+.sources-grid a{display:block;font-size:1.0625rem;line-height:1.5;color:var(--accent);overflow-wrap:anywhere;text-decoration-thickness:1px}
+.sources-grid p{font-size:0.9375rem;line-height:1.6;color:var(--muted);margin:3px 0 10px}
+.quiz-item{border-top:1px solid var(--line);padding:18px 0;font-size:1.3125rem;line-height:1.6}
+.quiz-item:last-of-type{border-bottom:1px solid var(--line)}
+.quiz-item summary{font-weight:500;cursor:pointer;list-style-position:outside;margin-left:22px;padding-left:4px;color:var(--ink)}
+.quiz-item summary::marker{color:var(--accent)}
+.quiz-item p{font-size:1.125rem;line-height:1.75;color:var(--muted);margin:13px 0 0 26px;max-width:1060px}
+.deck-mode .skip{z-index:1100}
+.deck-mode :focus-visible{outline-width:3px}
+@media(min-width:1500px){.slide .slide-scroll{padding-top:52px}.demo-slide .slide-scroll{padding-top:30px}}
+@media(max-width:1100px){.deck-mode .deck-toolbar{padding:10px 17px;gap:9px 13px}.deck-brand{max-width:130px}.deck-brand span{font-size:0.625rem}.deck-actions{gap:6px}.deck-actions button,.deck-actions a{padding:7px 9px}.slide .slide-scroll{padding:30px 37px 35px}.slide-heading h1,.slide-heading h2{font-size:2.4375rem}.cover-slide .slide-heading h1{font-size:3.125rem}.slide-columns{gap:25px}.slide-points{font-size:1.375rem}.slide-lead{font-size:1.4375rem}.concept-column p,.concept-column ul{font-size:1.1875rem}.flow-row{gap:22px}.demo-slide .slide-scroll{padding-top:24px}.demo-slide .demo-controls{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.deck-mode .deck-toolbar{padding:9px 12px;gap:8px 10px}.deck-brand{font-size:0.6875rem;max-width:none}.deck-brand strong{font-size:1.375rem}.deck-brand span{display:none}.deck-navigation{flex:1 1 210px;gap:4px}.deck-navigation select{min-width:100px;max-width:none;font-size:0.6875rem}.deck-navigation button{min-width:31px;padding:5px 7px}.deck-toolbar .reader-tools{gap:6px}.deck-toolbar .font-tools button{min-width:30px;padding:6px}.deck-toolbar .font-tools .font-percent{min-width:45px}.deck-actions{gap:6px;flex:1 1 auto}.deck-actions button,.deck-actions a{padding:6px 8px;font-size:0.6875rem;min-height:33px}.deck-toolbar .theme-toggle{font-size:0.6875rem;padding:6px 8px;min-height:34px}.slide .slide-scroll{padding:24px 21px 30px;scrollbar-gutter:auto}.slide-heading h1,.slide-heading h2{font-size:2.0625rem}.slide-kicker{font-size:0.625rem;margin-bottom:12px;letter-spacing:.1em}.slide-lead{font-size:1.3125rem;line-height:1.65;margin-bottom:22px}.slide-points{font-size:1.25rem;line-height:1.7;padding-left:23px}.slide-points li{margin-bottom:13px}.slide-columns{grid-template-columns:1fr;gap:23px;margin:23px 0}.concept-column{padding-left:16px}.concept-column h3{font-size:1.3125rem;margin-bottom:10px}.concept-column p,.concept-column ul{font-size:1.125rem}.flow-row{grid-template-columns:1fr;gap:20px;margin-top:24px}.flow-step{padding-top:12px;display:grid;grid-template-columns:27px 1fr;gap:0 10px}.flow-step:not(:last-child)::after{display:none}.flow-index{grid-row:1 / 3;margin-top:5px}.flow-label{font-size:1.25rem}.flow-detail{font-size:1rem;grid-column:2}.slide-equation{font-size:1.375rem;line-height:1.75;padding:18px;margin:22px 0}.slide-task,.slide-takeaway{font-size:1.0625rem;line-height:1.7}.cover-slide .slide-scroll{justify-content:flex-start;padding-top:34px}.cover-slide .slide-heading h1{font-size:2.5rem}.cover-slide .slide-lead{font-size:1.375rem}.cover-visual{margin-top:12px}.cover-metrics{gap:18px;font-size:0.875rem}.cover-metrics strong{font-size:1.1875rem}.demo-slide .slide-heading h2{font-size:1.8125rem}.demo-slide .slide-lead{font-size:1rem}.demo-slide .demo-root{padding:16px 15px}.demo-slide .demo-controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.demo-slide .scene{padding:13px}.demo-slide .metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.demo-slide .metric strong{font-size:1.375rem}.demo-slide .node-grid{grid-template-columns:1fr}.demo-slide .slide-task{font-size:0.875rem}.deck-footer{padding:0 12px;font-size:0.625rem}.deck-footer .keyboard-hint{display:none}#overview-dialog{width:calc(100vw - 24px);max-height:calc(100dvh - 24px);padding:20px 16px}#overview-dialog h2{font-size:1.5625rem;margin-right:85px}.overview-grid{grid-template-columns:1fr}.overview-grid>button{min-height:65px;padding:13px}.sources-grid{grid-template-columns:1fr;gap:16px}.sources-grid a{font-size:1rem}.quiz-item{font-size:1.1875rem;padding:16px 0}.quiz-item p{font-size:1rem}.speaker-notes{font-size:0.875rem;padding:14px 16px}}
+@media(max-width:400px){.slide .slide-scroll{padding-inline:15px}.deck-toolbar .reader-tools{flex:1 1 auto}.deck-actions{flex-basis:100%}.deck-mode .deck-toolbar{padding-inline:10px}.deck-brand{max-width:48px}.deck-brand strong{font-size:1.25rem}.deck-navigation{flex-basis:230px}.demo-slide .demo-controls{grid-template-columns:1fr}.slide-heading h1,.slide-heading h2{font-size:1.875rem}.cover-slide .slide-heading h1{font-size:2.25rem}.slide-lead{font-size:1.25rem}.slide-points{font-size:1.1875rem}}
+@media(prefers-reduced-motion:reduce){.slide .slide-scroll{scroll-behavior:auto}#deck-progress{transition:none}}
+@page{size:A4 landscape;margin:12mm}
+@media print{
+ :root{--ink:#18343e!important;--muted:#52636b!important;--accent:#087c77!important;--line:#d7e2e3!important;--paper:#fff!important;--bg:#fff!important;--soft:#edf4f4!important;color-scheme:light!important}
+ .deck-mode{height:auto!important;overflow:visible!important;color:var(--ink)!important;background:#fff!important}
+ .deck-mode .deck-toolbar,.deck-footer,#deck-progress,.deck-mode .skip,#overview-dialog{display:none!important}
+ .deck-mode .deck-stage{position:static!important;height:auto!important;overflow:visible!important;inset:auto!important;max-width:none!important}
+ .deck-mode .slide,.deck-mode .slide[hidden]{display:block!important;visibility:visible!important;height:auto!important;min-height:176mm!important;width:100%!important;overflow:visible!important;break-after:page;page-break-after:always;background:#fff!important;color:var(--ink)!important}
+ .deck-mode .slide:last-child{break-after:auto;page-break-after:auto}
+ .slide .slide-scroll,.cover-slide .slide-scroll{display:block!important;overflow:visible!important;height:auto!important;max-width:none!important;width:auto!important;padding:5mm 3mm!important;margin:0!important;scrollbar-gutter:auto!important}
+ .slide-heading h1,.slide-heading h2,.cover-slide .slide-heading h1{font-size:1.8125rem!important;line-height:1.15!important;color:var(--ink)!important}
+ .slide-lead,.cover-slide .slide-lead{font-size:1.125rem!important;line-height:1.5!important}
+ .slide-points{font-size:1.0625rem!important;line-height:1.6!important}
+ .slide-columns{grid-template-columns:repeat(3,minmax(0,1fr));gap:8mm;margin:7mm 0}
+ .concept-column h3{font-size:1.125rem!important}.concept-column p,.concept-column ul{font-size:0.9375rem!important;line-height:1.6!important}
+ .flow-row{grid-template-columns:repeat(5,minmax(0,1fr));gap:5mm}.flow-label{font-size:1rem!important}.flow-detail{font-size:0.8125rem!important}.flow-step::after{display:none!important}
+ .slide-equation{font-size:1.4375rem!important;padding:5mm;background:#edf4f4!important}
+ .speaker-notes{display:none!important}.slide-task,.slide-takeaway{font-size:0.875rem!important;margin-top:5mm;padding-top:4mm}
+ .demo-slide .demo-controls,.demo-slide .button-row,.demo-slide .event-log,.demo-slide .note{display:none!important}
+ .demo-slide .demo-root{padding:4mm;background:#fff!important;box-shadow:none!important;border-color:#d7e2e3!important;break-inside:avoid}
+ .demo-slide .scene{padding:4mm;margin:4mm 0;background:#f5f8f7!important;break-inside:avoid}.demo-slide .metrics{margin:4mm 0}
+ .demo-slide .status{font-size:0.75rem!important;margin:4mm 0;padding:3mm}.demo-slide .metric strong{font-size:1.25rem!important}
+ .demo-slide .node-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.demo-slide .metric span,.demo-slide .pod{font-size:0.6875rem!important}
+ .sources-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5mm}.sources-grid a{font-size:0.8125rem!important}.sources-grid p{font-size:0.75rem!important}
+ .quiz-item{font-size:1rem!important;padding:4mm 0}.quiz-item p{font-size:0.875rem!important;display:block!important}
+}
+:root{font-size:calc(1rem * var(--text-scale,1))}
+#overview-dialog:not([open]){display:none}
+.slide-heading .slide-lead{margin-top:18px}
+.slide-source{font-size:0.6875rem;color:var(--muted);margin:20px 0 0}
+.slide-source a{font-variant-numeric:tabular-nums;text-decoration:none}
+.flow-row{list-style:none;padding-left:0}
+.cover-visual{gap:18px;margin:20px 0 25px}
+.cover-service{padding:17px 22px;border:1px solid var(--accent);border-radius:8px;font-size:1.25rem;color:var(--ink)}
+.cover-connector{width:60px;height:2px;background:var(--accent)}
+.cover-pods{display:flex;gap:10px}
+.cover-pods>span{padding:13px 20px;background:var(--soft);border-radius:7px;color:var(--ink);font-size:1rem}
+.cover-pods small{display:block;font-size:0.75rem;color:var(--accent);margin-top:5px}
+.cover-visual>p{width:100%;margin:8px 0 0;color:var(--muted);font-size:0.875rem}
+.cover-slide .slide-points{display:flex;gap:12px 30px;flex-wrap:wrap;font-size:1rem;list-style:none;padding:0;margin:0}
+.cover-slide .slide-points li{padding:0;margin:0}
+@media(max-width:760px){.cover-connector{width:25px}.cover-service{font-size:1.0625rem}.cover-pods>span{padding:10px 13px}.cover-slide .slide-points{font-size:0.875rem}.slide-heading .slide-lead{margin-top:14px}}
+@media print{:root{font-size:1rem!important}}
+.comparison-slide .slide-columns{margin-top:22px;margin-bottom:22px}
+</style></head><body class="deck-mode"><a class="skip" href="#deck-stage">Slaydga o‘tish</a>
+<header id="deck-toolbar" class="deck-toolbar" aria-label="Taqdimot boshqaruvlari"><a class="deck-brand" href="M13_interaktiv_maruza.html" title="To‘liq ma’ruza matni"><strong>M13</strong> <span>Ma’ruza matni ↗</span></a><nav class="deck-navigation" aria-label="Slayd navigatsiyasi"><button type="button" id="prev-slide" aria-label="Oldingi slayd">←</button><output id="slide-counter" aria-label="Slayd raqami">01 / 20</output><button type="button" id="next-slide" aria-label="Keyingi slayd">→</button><label class="sr-only" for="slide-picker">Slaydni tanlash</label><select id="slide-picker"><option value="s01">01. Masshtablash, mavjudlik va o‘z-o‘zini tiklash</option><option value="s02">02. Portalda uchta alohida ehtiyoj bor</option><option value="s03">03. Nusxalar soni va bitta nusxa resursi</option><option value="s04">04. Replikalar va so‘rovlar navbati</option><option value="s05">05. CPU request hisoblashning asosidir</option><option value="s06">06. HPA tavsiyasi va tayyor nusxalar</option><option value="s07">07. Yangi Pod uchun mos tugun kerak</option><option value="s08">08. Pending Podlardan Ready nusxalargacha</option><option value="s09">09. Uch tekshiruvning savoli har xil</option><option value="s10">10. Trafikdan chiqarish va restart</option><option value="s11">11. Restart va Podni almashtirish</option><option value="s12">12. UID orqali tiklanishni ajratish</option><option value="s13">13. Tiklanishning vaqti va chegaralari</option><option value="s14">14. Texnik xizmatda tayyor nusxalar chegarasi</option><option value="s15">15. PDB qaysi chiqarishni kutdiradi</option><option value="s16">16. Replikalarning joylashuvi ham ahamiyatli</option><option value="s17">17. Tugun va umumiy baza nosozligi</option><option value="s18">18. Universitet portalida oxirgi kun</option><option value="s19">19. Qarorni holat bilan asoslang</option><option value="s20">20. Mavzuni rasmiy hujjatlardan davom ettirish</option></select></nav>
+<div class="reader-tools" aria-label="O‘qish sozlamalari"><div class="font-tools" role="group" aria-label="Matn hajmi"><button type="button" id="font-decrease" aria-label="Matnni kichraytirish" title="Matnni kichraytirish">A−</button><button type="button" id="font-reset" class="font-percent" aria-label="Matn hajmini 100 foizga qaytarish" title="100% ga qaytarish">100%</button><button type="button" id="font-increase" aria-label="Matnni kattalashtirish" title="Matnni kattalashtirish">A+</button></div><span id="font-size-status" class="sr-only" role="status" aria-live="polite"></span><button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false">Tungi rejim</button></div>
+<div class="deck-actions"><button type="button" id="overview-toggle" aria-controls="overview-dialog" aria-expanded="false">Mundarija</button><button type="button" id="notes-toggle" aria-pressed="false">O‘qituvchi izohi</button><button type="button" id="fullscreen-toggle" aria-pressed="false">To‘liq ekran</button><button type="button" id="print-deck">Chop etish</button></div></header>
+<main id="deck-stage" class="deck-stage" tabindex="-1"><section class="slide cover-slide" id="s01" data-title="Masshtablash, mavjudlik va o‘z-o‘zini tiklash" aria-labelledby="title-s01" aria-hidden="false"><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">M13 · Cloud-native tizimlar</div><h1 id="title-s01">Masshtablash, mavjudlik va o‘z-o‘zini tiklash</h1><p class="slide-lead">Universitet portalida yuklama oshsa yoki bir qism ishlamay qolsa, xizmat qanday davom etadi?</p></header><div class="cover-visual" aria-label="Service orqali uchta Ready Podga trafik yo‘naltiriladi"><div class="cover-service">Universitet portali</div><div class="cover-connector" aria-hidden="true"></div><div class="cover-pods"><span>Pod 1<small>Ready</small></span><span>Pod 2<small>Ready</small></span><span>Pod 3<small>Ready</small></span></div><p>Yuklama · nosozlik · tiklanish</p></div><ul class="slide-points"><li>Replikalar va avtomatik masshtablash</li><li>Ilova holati va tiklanish</li><li>Texnik xizmat va yuqori mavjudlik</li></ul><p class="slide-source">Ma’ruza manbalari <a href="#s20">[2]</a>, <a href="#s20">[3]</a>, <a href="#s20">[8]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Portalga talabalar bir vaqtda kiradigan vaziyatni kiriting. Keyingi tajribalarda sonlar va vaqtlar shartli o‘quv modeliga tegishli ekanini ayting.</p></aside></div></section><section class="slide comparison-slide" id="s02" data-title="Portalda uchta alohida ehtiyoj bor" aria-labelledby="title-s02" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Muammo</div><h2 id="title-s02">Portalda uchta alohida ehtiyoj bor</h2><p class="slide-lead">Bir vaziyatda bir nechta mexanizm birga ishlashi mumkin.</p></header><div class="slide-columns"><section class="concept-column"><h3>Masshtablash</h3><p>Yuklamaga mos quvvat ajratish.</p><ul class="slide-points"><li>Murojaatlar ko‘paydi</li><li>Qo‘shimcha nusxalar kerak</li></ul></section><section class="concept-column"><h3>Mavjudlik</h3><p>Foydalanuvchi kerakli amalni bajara olishi.</p><ul class="slide-points"><li>Bitta nusxa nosoz</li><li>Qolganlari xizmat ko‘rsatadi</li></ul></section><section class="concept-column"><h3>O‘z-o‘zini tiklash</h3><p>Tizim kerakli holatni qayta tiklashga harakat qiladi.</p><ul class="slide-points"><li>Konteynerni restart qilish</li><li>Yo‘qolgan Podni almashtirish</li></ul></section></div><p class="slide-source">Ma’ruza manbalari <a href="#s20">[2]</a>, <a href="#s20">[3]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Talabadan yuklama oshishi, bitta nusxa yo‘qolishi va xizmatning davom etishi misollarini uch ehtiyojga ajratishni so‘rang.</p></aside></div></section><section class="slide comparison-slide" id="s03" data-title="Nusxalar soni va bitta nusxa resursi" aria-labelledby="title-s03" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Replikalar</div><h2 id="title-s03">Nusxalar soni va bitta nusxa resursi</h2><p class="slide-lead">Replika — ilovaning alohida ishlayotgan nusxasi. Deployment nusxalar sonini saqlashga harakat qiladi.</p></header><div class="slide-columns"><section class="concept-column"><h3>Gorizontal masshtablash</h3><p>Podlar soni o‘zgaradi.</p><ul class="slide-points"><li>3 ta o‘rniga 5 ta Pod</li></ul></section><section class="concept-column"><h3>Vertikal masshtablash</h3><p>Bitta nusxaning CPU yoki xotira resursi o‘zgaradi.</p><ul class="slide-points"><li>Bitta ish joyi kuchayadi</li></ul></section></div><ul class="slide-points"><li>Service tayyor Podlarga trafik yo‘naltiradi.</li><li>Umumiy baza quvvati barcha nusxalarni cheklashi mumkin.</li></ul><p class="slide-source">Ma’ruza manbalari <a href="#s20">[2]</a>, <a href="#s20">[4]</a>, <a href="#s20">[5]</a>, <a href="#s20">[7]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Replika va zaxira nusxa farqini eslating. Service mutlaq teng trafik va nusxalar soniga mutanosib tezlikni kafolatlamasligini ayting.</p></aside></div></section><section class="slide demo-slide" id="s04" data-title="Replikalar va so‘rovlar navbati" aria-labelledby="title-s04" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Tajriba 01</div><h2 id="title-s04">Replikalar va so‘rovlar navbati</h2><p class="slide-lead">Veb-nusxalar va umumiy baza quvvati natijaga qanday ta’sir qilishini kuzating.</p></header><div class="slide-demo-panel"><div class="demo-root" data-demo="scaling"><p class="note">Namoyish yuklanmoqda…</p></div></div><p class="slide-task"><strong>Tajriba.</strong> Bir nusxadan uch nusxaga o‘ting. Keyin bazani sekinlashtiring va yana replika qo‘shing. Navbatning asosiy sababi qayerda qoldi?</p><p class="slide-source">Ma’ruza manbalari <a href="#s20">[2]</a>, <a href="#s20">[4]</a>, <a href="#s20">[5]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Dastlab gorizontal rejimda bitta nusxani tanlang. Navbat o‘sishini kuzatib, sonni uchta qiling. Keyin baza quvvatini kamaytiring. Vertikal rejimda qaysi boshqaruv faol ekanini ko‘rsating.</p></aside></div></section><section class="slide formula-slide" id="s05" data-title="CPU request hisoblashning asosidir" aria-labelledby="title-s05" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">HPA</div><h2 id="title-s05">CPU request hisoblashning asosidir</h2><p class="slide-lead">3 ta replika. Har birida request 200m, o‘rtacha sarf 180m. Maqsad 60%.</p></header><div class="slide-equation">180 ÷ 200 × 100 = 90%<br>ceil(3 × 90 ÷ 60) = ceil(4,5) = 5</div><ul class="slide-points"><li>HPA Deploymentning kerakli nusxalar sonini o‘zgartiradi.</li><li>minReplicas=3 va maxReplicas=6 tanlovni cheklaydi.</li><li>Yangi Podlarning yaratilishi va Ready bo‘lishi vaqt oladi.</li></ul><p class="slide-source">Ma’ruza manbalari <a href="#s20">[2]</a>, <a href="#s20">[6]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>CPU foizi requestga nisbatan hisoblanadi. 1000m bitta CPU birligiga teng. Hisob soddalashtirilgan: haqiqiy controller metrikalar, tayyorlik, tolerans va siyosatlarni ham hisobga oladi.</p></aside></div></section><section class="slide demo-slide" id="s06" data-title="HPA tavsiyasi va tayyor nusxalar" aria-labelledby="title-s06" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Tajriba 02</div><h2 id="title-s06">HPA tavsiyasi va tayyor nusxalar</h2><p class="slide-lead">CPU sarfi, request va maqsadni o‘zgartiring, keyin qarorning bajarilishini bosqichma-bosqich kuzating.</p></header><div class="slide-demo-panel"><div class="demo-root" data-demo="hpa"><p class="note">Namoyish yuklanmoqda…</p></div></div><p class="slide-task"><strong>Tajriba.</strong> Boshlang‘ich qiymatlarda 5 ta nusxa tavsiyasini oling. maxReplicas qiymatini 4 qiling. Keyin metrikalar yo‘qligini tekshiring.</p><p class="slide-source">Ma’ruza manbalari <a href="#s20">[2]</a>, <a href="#s20">[9]</a>, <a href="#s20">[10]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Avval 3 ta Ready va 5 ta kerakli nusxa o‘rtasidagi farqni to‘xtatib tushuntiring. Podlar Ready bo‘lgach bir nusxaga sarf qayta taqsimlanadi. So‘ng requestni oshirib, foiz o‘zgarishini ko‘rsating.</p></aside></div></section><section class="slide flow-slide" id="s07" data-title="Yangi Pod uchun mos tugun kerak" aria-labelledby="title-s07" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Klaster quvvati</div><h2 id="title-s07">Yangi Pod uchun mos tugun kerak</h2><p class="slide-lead">HPA va node autoscaling turli qarorlarni bajaradi.</p></header><ol class="flow-row"><li class="flow-step"><span class="flow-index">01</span><strong class="flow-label">HPA</strong><p class="flow-detail">Kerakli nusxalar sonini oshiradi</p></li><li class="flow-step"><span class="flow-index">02</span><strong class="flow-label">Controller</strong><p class="flow-detail">Yangi Podlarni yaratadi</p></li><li class="flow-step"><span class="flow-index">03</span><strong class="flow-label">Scheduler</strong><p class="flow-detail">Mos joy topolmasa Pod kutadi</p></li><li class="flow-step"><span class="flow-index">04</span><strong class="flow-label">Node autoscaler</strong><p class="flow-detail">Mos tugun ajratishni so‘raydi</p></li><li class="flow-step"><span class="flow-index">05</span><strong class="flow-label">Kubelet</strong><p class="flow-detail">Ilovani ishga tushiradi, tayyorlik tekshiriladi</p></li></ol><ul class="slide-points"><li>Scheduler resurs requestlari va joylashtirish cheklovlarini tekshiradi.</li><li>Har bir Pending sababini yangi tugun hal qilavermaydi.</li></ul><p class="slide-source">Ma’ruza manbalari <a href="#s20">[2]</a>, <a href="#s20">[5]</a>, <a href="#s20">[11]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Node autoscalingni CPU foizining yagona chegarasi bilan tushuntirmang. Misolda tugunga sig‘mayotgan Podlarning requesti asosiy sabab. Tugun turi yoki infratuzilma limiti ham to‘siq bo‘lishi mumkin.</p></aside></div></section><section class="slide demo-slide" id="s08" data-title="Pending Podlardan Ready nusxalargacha" aria-labelledby="title-s08" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Tajriba 03</div><h2 id="title-s08">Pending Podlardan Ready nusxalargacha</h2><p class="slide-lead">Yangi tugun ajratilishi, Pod joylashishi va tayyorlanishi alohida bosqichlardir.</p></header><div class="slide-demo-panel"><div class="demo-root" data-demo="nodes"><p class="note">Namoyish yuklanmoqda…</p></div></div><p class="slide-task"><strong>Tajriba.</strong> 5 ta Pod talab qiling. Autoscaler o‘chiq va yoqilgan holatlarni taqqoslang. Keyin tugun limitini 1 qiling.</p><p class="slide-source">Ma’ruza manbalari <a href="#s20">[11]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Boshlang‘ich uchta Pod tugun sig‘imini egallagan. Ikki yangi Podning Pending bo‘lishi, tugun so‘ralishi va Ready bo‘lishini ajrating. Mos kelmaydigan tugun turini ham sinang.</p></aside></div></section><section class="slide comparison-slide" id="s09" data-title="Uch tekshiruvning savoli har xil" aria-labelledby="title-s09" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Probe</div><h2 id="title-s09">Uch tekshiruvning savoli har xil</h2><p class="slide-lead">Startup muvaffaqiyatidan keyin readiness va liveness mustaqil ishlaydi.</p></header><div class="slide-columns"><section class="concept-column"><h3>Startup</h3><p>Boshlang‘ich tayyorgarlik tugadimi?</p><ul class="slide-points"><li>Qolgan ikki probe uchun boshlanish sharti</li><li>Xatolar chegarasida konteyner to‘xtatiladi</li></ul></section><section class="concept-column"><h3>Readiness</h3><p>Hozir shu nusxaga so‘rov yuborish mumkinmi?</p><ul class="slide-points"><li>Ready holati va odatiy trafikni boshqaradi</li><li>Xatoning o‘zi restart bermaydi</li></ul></section><section class="concept-column"><h3>Liveness</h3><p>Dastur ishlashni davom ettira olyaptimi?</p><ul class="slide-points"><li>Qotib qolishni aniqlashi mumkin</li><li>Chegaradan keyin restart siyosati qo‘llanadi</li></ul></section></div><p class="slide-source">Ma’ruza manbalari <a href="#s20">[12]</a>, <a href="#s20">[13]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Probe’larni kubelet bajaradi. Liveness readiness muvaffaqiyatini kutishi shart emas. /startup, /ready va /live manzillarini ilovaning o‘zi taqdim etishini ayting.</p></aside></div></section><section class="slide demo-slide" id="s10" data-title="Trafikdan chiqarish va restart" aria-labelledby="title-s10" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Tajriba 04</div><h2 id="title-s10">Trafikdan chiqarish va restart</h2><p class="slide-lead">Vaqt chizig‘ida probe natijalari, ketma-ket xatolar va konteyner holatini kuzating.</p></header><div class="slide-demo-panel"><div class="demo-root" data-demo="probes"><p class="note">Namoyish yuklanmoqda…</p></div></div><p class="slide-task"><strong>Tajriba.</strong> Readiness xatosini kiriting va restart sonini tekshiring. Keyin ilovani qotiring. failureThreshold natijaga qanday ta’sir qilishini tushuntiring.</p><p class="slide-source">Ma’ruza manbalari <a href="#s20">[12]</a>, <a href="#s20">[13]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Startup tugaguncha qolgan probe’lar kutayotganini ko‘rsating. Readiness xatosi chegarasida trafik to‘xtaydi. Qotish holatida liveness xatolari yig‘iladi. Parametr o‘zgarishi tajribani qayta boshlashini eslating.</p></aside></div></section><section class="slide comparison-slide" id="s11" data-title="Restart va Podni almashtirish" aria-labelledby="title-s11" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Tiklanish</div><h2 id="title-s11">Restart va Podni almashtirish</h2><p class="slide-lead">Pod identifikatori qaysi obyekt o‘zgarganini ko‘rsatadi.</p></header><div class="slide-columns"><section class="concept-column"><h3>Konteyner restarti</h3><p>Kubelet mavjud Pod ichida konteynerni qayta ishga tushiradi.</p><ul class="slide-points"><li>Pod UID saqlanadi</li><li>Tugun saqlanadi</li><li>Restart hisoblagichi ortadi</li></ul></section><section class="concept-column"><h3>Yangi Pod</h3><p>Controller yangi obyekt yaratadi, scheduler mos tugun tanlaydi.</p><ul class="slide-points"><li>Yangi UID paydo bo‘ladi</li><li>Tugun talablarga ko‘ra tanlanadi</li><li>Eski Pod boshqa serverga ko‘chmaydi</li></ul></section></div><ul class="slide-points"><li>Deployment veb-ilovasida restartPolicy odatda Always bo‘ladi.</li></ul><p class="slide-source">Ma’ruza manbalari <a href="#s20">[4]</a>, <a href="#s20">[14]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Always konteyner restartiga taalluqli. Nusxalar sonini controller saqlashga harakat qiladi. Node nosozligi aniqlanishi va yangi nusxa tayyorlanishi alohida vaqt talab qilishini tushuntiring.</p></aside></div></section><section class="slide demo-slide" id="s12" data-title="UID orqali tiklanishni ajratish" aria-labelledby="title-s12" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Tajriba 05</div><h2 id="title-s12">UID orqali tiklanishni ajratish</h2><p class="slide-lead">Jarayon, Pod va tugun nosozligida qaysi obyekt yangilanishini kuzating.</p></header><div class="slide-demo-panel"><div class="demo-root" data-demo="recovery"><p class="note">Namoyish yuklanmoqda…</p></div></div><p class="slide-task"><strong>Tajriba.</strong> Konteynerni to‘xtating, keyin Podni yo‘qoting. Har tajribada UID va restart sonini solishtiring. Konfiguratsiya xatosini ham sinang.</p><p class="slide-source">Ma’ruza manbalari <a href="#s20">[3]</a>, <a href="#s20">[14]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Restartda UID saqlanishini, Pod yo‘qolganda yangi UID paydo bo‘lishini ko‘rsating. Controllersiz Pod variantida tiklash chegarasini tekshiring. Konfiguratsiyani tuzatmasdan takroriy restart sababni yo‘qotmaydi.</p></aside></div></section><section class="slide concept-slide" id="s13" data-title="Tiklanishning vaqti va chegaralari" aria-labelledby="title-s13" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">O‘z-o‘zini tiklash</div><h2 id="title-s13">Tiklanishning vaqti va chegaralari</h2><p class="slide-lead">Avtomatik harakatning mavjudligi foydalanuvchi uzilish sezmasligini kafolatlamaydi.</p></header><ul class="slide-points"><li>Bo‘sh resurs, obrazni olish, ilova boshlanishi va saqlashga ulanish vaqt talab qiladi.</li><li>Noto‘g‘ri konfiguratsiya va dastur xatosi yangi konteynerda ham qolishi mumkin.</li><li>CrashLoopBackOff keyingi restart oldidan kutishni bildiradi.</li><li>Doimiy ma’lumot va zaxira nusxalar alohida tashkil qilinadi.</li></ul><p class="slide-source">Ma’ruza manbalari <a href="#s20">[3]</a>, <a href="#s20">[7]</a>, <a href="#s20">[8]</a>, <a href="#s20">[14]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Bir replika qayta ishga tushguncha xizmat uzilishi mumkin. Qolgan sog‘lom nusxalar xizmatni davom ettirishga yordam beradi. CrashLoopBackOff Podning hayotiy fazasi emasligini ayting.</p></aside></div></section><section class="slide flow-slide" id="s14" data-title="Texnik xizmatda tayyor nusxalar chegarasi" aria-labelledby="title-s14" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">PDB</div><h2 id="title-s14">Texnik xizmatda tayyor nusxalar chegarasi</h2><p class="slide-lead">3 ta Ready Pod va minAvailable: 2 holatida sog‘lom Podlarni navbat bilan chiqaramiz.</p></header><ol class="flow-row"><li class="flow-step"><span class="flow-index">01</span><strong class="flow-label">3 ta Ready</strong><p class="flow-detail">Bitta sog‘lom Podni chiqarish mumkin</p></li><li class="flow-step"><span class="flow-index">02</span><strong class="flow-label">2 ta Ready</strong><p class="flow-detail">Keyingi sog‘lom Pod chiqarilishi kutadi</p></li><li class="flow-step"><span class="flow-index">03</span><strong class="flow-label">Yangi Pod Ready</strong><p class="flow-detail">Budjet navbatdagi chiqarishga imkon beradi</p></li></ol><ul class="slide-points"><li>PDB Eviction API orqali chiqarishni cheklaydi.</li><li>Kutilmagan tugun nosozligi va bevosita o‘chirishni to‘xtatmaydi.</li><li>HPA quyi chegarasini minReplicas belgilaydi.</li></ul><p class="slide-source">Ma’ruza manbalari <a href="#s20">[2]</a>, <a href="#s20">[8]</a>, <a href="#s20">[15]</a>, <a href="#s20">[16]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Bu misol sog‘lom Pod evictioniga tegishli. Noso‘g‘lom Pod qoidalari alohida siyosatga bog‘liq. Deployment rolling update mavjudligini uning yangilash strategiyasi boshqarishini ayting.</p></aside></div></section><section class="slide demo-slide" id="s15" data-title="PDB qaysi chiqarishni kutdiradi" aria-labelledby="title-s15" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Tajriba 06</div><h2 id="title-s15">PDB qaysi chiqarishni kutdiradi</h2><p class="slide-lead">Eviction budjetini tayyor nusxalar soni bilan birga kuzating.</p></header><div class="slide-demo-panel"><div class="demo-root" data-demo="pdb"><p class="note">Namoyish yuklanmoqda…</p></div></div><p class="slide-task"><strong>Tajriba.</strong> Ikkita sog‘lom Podni ketma-ket chiqarishga urining. Yangi Pod Ready bo‘lgach takrorlang. Node nosozligini alohida tekshiring.</p><p class="slide-source">Ma’ruza manbalari <a href="#s20">[8]</a>, <a href="#s20">[15]</a>, <a href="#s20">[16]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>currentHealthy va disruptionsAllowed hisoblarini ko‘rsating. Eviction rad etilishi, bevosita o‘chirish va kutilmagan nosozlikni ajrating. Kerakli sonni bittaga tushirish tajribasining HPA minReplicas=1 shartini ayting.</p></aside></div></section><section class="slide comparison-slide" id="s16" data-title="Replikalarning joylashuvi ham ahamiyatli" aria-labelledby="title-s16" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Yuqori mavjudlik</div><h2 id="title-s16">Replikalarning joylashuvi ham ahamiyatli</h2><p class="slide-lead">Bir xil uchta nusxa turli nosozlik doiralarida turlicha himoya beradi.</p></header><div class="slide-columns"><section class="concept-column"><h3>Bitta tugunda</h3><p>Bitta server nosozligi barcha uchta Podga ta’sir qiladi.</p><ul class="slide-points"><li>Umumiy nosozlik doirasi</li></ul></section><section class="concept-column"><h3>Turli tugunlarda</h3><p>Bitta tugun nosozligida boshqa tugunlardagi nusxalar qoladi.</p><ul class="slide-points"><li>Topology spread yoki anti-affinity yordam beradi</li></ul></section></div><ul class="slide-points"><li>Qolgan nusxalar butun yuklamani ko‘tara olishi kerak.</li><li>Yagona baza, tarmoq yoki saqlash nosozligi butun xizmatga ta’sir qilishi mumkin.</li></ul><p class="slide-source">Ma’ruza manbalari <a href="#s20">[8]</a>, <a href="#s20">[17]</a>, <a href="#s20">[18]</a>, <a href="#s20">[19]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>replicas: 3 yozish avtomatik uchta alohida fizik server degani emas. Bir noutbukdagi uch virtual node ham noutbuk nosozligida birga to‘xtashini tushuntiring.</p></aside></div></section><section class="slide demo-slide" id="s17" data-title="Tugun va umumiy baza nosozligi" aria-labelledby="title-s17" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Tajriba 07</div><h2 id="title-s17">Tugun va umumiy baza nosozligi</h2><p class="slide-lead">To‘plangan va tarqatilgan replikalarda foydalanuvchi so‘rovlari natijasini solishtiring.</p></header><div class="slide-demo-panel"><div class="demo-root" data-demo="ha"><p class="note">Namoyish yuklanmoqda…</p></div></div><p class="slide-task"><strong>Tajriba.</strong> Node A ni o‘chiring. Yuklamani oshiring. Keyin umumiy bazani o‘chiring. Ready soni bilan bajarilgan so‘rovlar qanday farq qildi?</p><p class="slide-source">Ma’ruza manbalari <a href="#s20">[8]</a>, <a href="#s20">[17]</a>, <a href="#s20">[18]</a>, <a href="#s20">[19]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Ikki sog‘lom nusxa qolgan holatda quvvat yetarliligini tekshiring. Bazani o‘chirib, veb readiness bazaga bog‘lanmagan modelda Ready belgisi qolishi mumkinligini tushuntiring.</p></aside></div></section><section class="slide demo-slide" id="s18" data-title="Universitet portalida oxirgi kun" aria-labelledby="title-s18" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Tajriba 08</div><h2 id="title-s18">Universitet portalida oxirgi kun</h2><p class="slide-lead">HPA 3–6, CPU maqsadi 60%, PDB minAvailable: 2. Hodisalar bo‘yicha mexanizmlarni tanlang.</p></header><div class="slide-demo-panel"><div class="demo-root" data-demo="scenario"><p class="note">Namoyish yuklanmoqda…</p></div></div><p class="slide-task"><strong>Tajriba.</strong> Hodisani tanlang. Har qadamdan oldin keyingi harakat bajaruvchisini taxmin qiling. So‘ng hodisalar jurnali orqali javobingizni tekshiring.</p><p class="slide-source">Ma’ruza manbalari <a href="#s20">[2]</a>, <a href="#s20">[8]</a>, <a href="#s20">[11]</a>, <a href="#s20">[12]</a>, <a href="#s20">[14]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Yuklama oshishidan boshlang. Keyin vaqtinchalik readiness xatosi, qotish, node nosozligi, texnik xizmat va baza uzilishini solishtiring. Kerakli, yaratilgan va Ready sonlarini ajrating.</p></aside></div></section><section class="slide quiz-slide" id="s19" data-title="Qarorni holat bilan asoslang" aria-labelledby="title-s19" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Muhokama</div><h2 id="title-s19">Qarorni holat bilan asoslang</h2><p class="slide-lead">Javobingizga mos namoyishdan dalil keltiring.</p></header><div class="quiz-grid"><details class="quiz-item"><summary>HPA 5 ta nusxa so‘radi. Nega faqat 3 tasi Ready?</summary><p>Yaratish, joylashtirish yoki ilova tayyorlanishi hali tugamagan bo‘lishi mumkin. Kerakli son Ready sonini kafolatlamaydi.</p></details><details class="quiz-item"><summary>Readiness xatoga uchradi. Nega restart soni o‘zgarmadi?</summary><p>Readiness odatiy trafik yo‘naltirishga ta’sir qiladi. Konteyner restartini uning o‘zi buyurmaydi.</p></details><details class="quiz-item"><summary>PDB bor. Nega tugun nosozligi Podni to‘xtatdi?</summary><p>PDB Eviction API orqali boshqariladigan chiqarishlarni cheklaydi. Kutilmagan nosozlikni to‘xtatmaydi.</p></details><details class="quiz-item"><summary>3 ta veb-Pod Ready. Nega talaba amalni bajara olmadi?</summary><p>Umumiy baza, saqlash yoki tarmoq ishlamayotgan bo‘lishi mumkin. Butun xizmat yo‘lini tekshirish kerak.</p></details></div><p class="slide-source">Ma’ruza manbalari <a href="#s20">[2]</a>, <a href="#s20">[8]</a>, <a href="#s20">[11]</a>, <a href="#s20">[12]</a>, <a href="#s20">[14]</a>, <a href="#s20">[17]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Avval talabalar javobini tinglang, keyin kerakli tajribaga qayting. Javoblarni ochish imkoniyati bo‘lsa, izohdan keyin ko‘rsating.</p></aside></div></section><section class="slide sources-slide" id="s20" data-title="Mavzuni rasmiy hujjatlardan davom ettirish" aria-labelledby="title-s20" aria-hidden="true" hidden><div class="slide-scroll"><header class="slide-heading"><div class="slide-kicker">Manbalar</div><h2 id="title-s20">Mavzuni rasmiy hujjatlardan davom ettirish</h2><p class="slide-lead">Taqdimot M13 ma’ruza matni asosida tuzildi. Namoyishlar soddalashtirilgan o‘quv modellaridir.</p></header><ul class="slide-points"><li>Tashqi manbalar uchun internet kerak.</li></ul><div class="sources-grid"><a href="https://kubernetes.io/docs/concepts/workloads/autoscaling/horizontal-pod-autoscale/" target="_blank" rel="noopener noreferrer">Horizontal Pod Autoscaling<span aria-hidden="true">↗</span></a><a href="https://kubernetes.io/docs/concepts/cluster-administration/node-autoscaling/" target="_blank" rel="noopener noreferrer">Node Autoscaling<span aria-hidden="true">↗</span></a><a href="https://kubernetes.io/docs/concepts/workloads/pods/probes/" target="_blank" rel="noopener noreferrer">Liveness, Readiness, and Startup Probes<span aria-hidden="true">↗</span></a><a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/" target="_blank" rel="noopener noreferrer">Pod Lifecycle<span aria-hidden="true">↗</span></a><a href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/" target="_blank" rel="noopener noreferrer">Disruptions va PDB<span aria-hidden="true">↗</span></a><a href="https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/" target="_blank" rel="noopener noreferrer">Pod Topology Spread Constraints<span aria-hidden="true">↗</span></a></div><p class="slide-source">Ma’ruza manbalari <a href="#s20">[2]</a>, <a href="#s20">[11]</a>, <a href="#s20">[12]</a>, <a href="#s20">[14]</a>, <a href="#s20">[8]</a>, <a href="#s20">[18]</a></p><aside class="speaker-notes" hidden><strong>O‘qituvchi izohi</strong><p>Har bir mexanizmning batafsil shartlarini rasmiy hujjatlardan tekshirishni tavsiya qiling. Ma’ruzaning to‘liq variantidagi qolgan manbalar va YAML namunalariga qaytish mumkin.</p></aside></div></section></main><footer class="deck-footer"><span class="keyboard-hint">← → Slayd almashtirish <span>Home / End · Boshiga / oxiriga</span></span><span>Interaktiv o‘quv modellari</span><div class="deck-progress-track"><div id="deck-progress" class="progress-fill" role="progressbar" aria-label="Taqdimot davomiyligi" aria-valuemin="1" aria-valuemax="20" aria-valuenow="1"></div></div></footer><span id="deck-status" class="sr-only" role="status" aria-live="polite"></span>
+<dialog id="overview-dialog" aria-labelledby="overview-heading"><div class="overview-header"><h2 id="overview-heading">Taqdimot mundarijasi</h2><button type="button" data-close-overview aria-label="Mundarijani yopish">✕</button></div><div class="overview-grid"><button type="button" data-jump="s01"><span class="overview-number">01</span><span class="overview-title">Masshtablash, mavjudlik va o‘z-o‘zini tiklash</span></button><button type="button" data-jump="s02"><span class="overview-number">02</span><span class="overview-title">Portalda uchta alohida ehtiyoj bor</span></button><button type="button" data-jump="s03"><span class="overview-number">03</span><span class="overview-title">Nusxalar soni va bitta nusxa resursi</span></button><button type="button" data-jump="s04"><span class="overview-number">04</span><span class="overview-title">Replikalar va so‘rovlar navbati</span><small>Tajriba</small></button><button type="button" data-jump="s05"><span class="overview-number">05</span><span class="overview-title">CPU request hisoblashning asosidir</span></button><button type="button" data-jump="s06"><span class="overview-number">06</span><span class="overview-title">HPA tavsiyasi va tayyor nusxalar</span><small>Tajriba</small></button><button type="button" data-jump="s07"><span class="overview-number">07</span><span class="overview-title">Yangi Pod uchun mos tugun kerak</span></button><button type="button" data-jump="s08"><span class="overview-number">08</span><span class="overview-title">Pending Podlardan Ready nusxalargacha</span><small>Tajriba</small></button><button type="button" data-jump="s09"><span class="overview-number">09</span><span class="overview-title">Uch tekshiruvning savoli har xil</span></button><button type="button" data-jump="s10"><span class="overview-number">10</span><span class="overview-title">Trafikdan chiqarish va restart</span><small>Tajriba</small></button><button type="button" data-jump="s11"><span class="overview-number">11</span><span class="overview-title">Restart va Podni almashtirish</span></button><button type="button" data-jump="s12"><span class="overview-number">12</span><span class="overview-title">UID orqali tiklanishni ajratish</span><small>Tajriba</small></button><button type="button" data-jump="s13"><span class="overview-number">13</span><span class="overview-title">Tiklanishning vaqti va chegaralari</span></button><button type="button" data-jump="s14"><span class="overview-number">14</span><span class="overview-title">Texnik xizmatda tayyor nusxalar chegarasi</span></button><button type="button" data-jump="s15"><span class="overview-number">15</span><span class="overview-title">PDB qaysi chiqarishni kutdiradi</span><small>Tajriba</small></button><button type="button" data-jump="s16"><span class="overview-number">16</span><span class="overview-title">Replikalarning joylashuvi ham ahamiyatli</span></button><button type="button" data-jump="s17"><span class="overview-number">17</span><span class="overview-title">Tugun va umumiy baza nosozligi</span><small>Tajriba</small></button><button type="button" data-jump="s18"><span class="overview-number">18</span><span class="overview-title">Universitet portalida oxirgi kun</span><small>Tajriba</small></button><button type="button" data-jump="s19"><span class="overview-number">19</span><span class="overview-title">Qarorni holat bilan asoslang</span></button><button type="button" data-jump="s20"><span class="overview-number">20</span><span class="overview-title">Mavzuni rasmiy hujjatlardan davom ettirish</span></button></div></dialog><noscript><p>Slaydlarni boshqarish va namoyishlar uchun JavaScriptni yoqing.</p></noscript><script>(function () {
+  'use strict';
+  const M = window.M13 = window.M13 || {};
+  const nfmt = n => Number(n).toLocaleString('uz-UZ', { maximumFractionDigits: 1 });
+  const metric = (value, label) => `<div class="metric"><strong>${value}</strong><span>${label}</span></div>`;
+  const pod = (i, state, detail = '') => `<div class="pod ${state}"><strong>Pod ${i}</strong><span>${detail || ({ready:'Ready · trafik oladi',pending:'Pending · joy kutmoqda',starting:'Ishga tushmoqda',failed:'Nosoz'})[state]}</span></div>`;
+  const addLog = (root, logs, message) => {
+    logs.unshift(message);
+    logs.splice(7);
+    root.querySelector('[data-log]').innerHTML = logs.map(x => `<li>${x}</li>`).join('');
+  };
+
+  M.mountScaling = function (root) {
+    root.innerHTML = `
+      <div class="demo-controls">
+        <label class="control">Masshtablash usuli<select data-mode><option value="horizontal">Gorizontal — nusxalar soni</option><option value="vertical">Vertikal — bitta nusxa quvvati</option></select></label>
+        <label class="control">Keluvchi so‘rovlar <output data-demand-out>240 so‘rov/s</output><input data-demand type="range" min="40" max="800" step="20" value="240"></label>
+        <label class="control">Replikalar <output data-replicas-out>3 ta</output><input data-replicas type="range" min="1" max="6" step="1" value="3"></label>
+        <label class="control">Bir nusxaning shartli quvvati <output data-capacity-out>100 so‘rov/s</output><input data-capacity type="range" min="50" max="250" step="25" value="100"></label>
+        <label class="control">Umumiy baza quvvati <output data-db-out>600 so‘rov/s</output><input data-db type="range" min="100" max="1000" step="50" value="600"></label>
+      </div>
+      <div class="button-row"><button type="button" class="primary" data-run>Boshlash</button><button type="button" class="secondary" data-step>1 soniya</button><button type="button" class="secondary" data-reset>Qayta boshlash</button><button type="button" class="secondary" data-bottleneck>Bazani sekinlashtirish</button></div>
+      <div class="metrics" data-metrics></div>
+      <div class="scene" data-scene></div>
+      <p class="status" data-status role="status"></p>
+      <p class="note">Soddalashtirilgan o‘quv modeli: har so‘rov baza bilan ishlaydi; navbat cheksiz deb olinadi. Haqiqiy Service trafikni mutlaq teng taqsimlamaydi, unumdorlik ham doim chiziqli oshmaydi.</p>
+      <p class="task"><strong>Tajriba:</strong> 1 ta nusxada navbatni kuzating, keyin gorizontal rejimda 3 ta qiling. Bazani sekinlashtirib, yana replika qo‘shing. Cheklov qayerda qolmoqda?</p>`;
+    const q = s => root.querySelector(s);
+    let timer = null, elapsed = 0, queue = 0, completed = 0;
+    function values() { return { demand:+q('[data-demand]').value, replicas:+q('[data-replicas]').value, capacity:+q('[data-capacity]').value, db:+q('[data-db]').value, mode:q('[data-mode]').value }; }
+    function render() {
+      const s = values(), web = s.replicas*s.capacity, throughput = Math.min(web,s.db), bottleneck = s.db < web;
+      ['demand','capacity','db'].forEach(k => q(`[data-${k}-out]`).textContent = `${s[k]} so‘rov/s`);
+      q('[data-replicas-out]').textContent = `${s.replicas} ta`;
+      q('[data-replicas]').disabled = s.mode === 'vertical';
+      q('[data-capacity]').disabled = s.mode === 'horizontal';
+      q('[data-metrics]').innerHTML = metric(`${elapsed} s`, 'Model vaqti')+metric(nfmt(queue), 'Navbatdagi so‘rovlar')+metric(nfmt(completed), 'Bajarilgan so‘rovlar');
+      q('[data-scene]').innerHTML = `<div style="text-align:center"><strong>Foydalanuvchilar: ${s.demand} so‘rov/s</strong><div aria-hidden="true" style="font-size:1.5em">↓</div><strong>Service → tayyor Podlar</strong></div><div class="pod-list" style="justify-content:center;margin:1rem 0">${Array.from({length:s.replicas},(_,i)=>pod(i+1,'ready',`${s.capacity} so‘rov/s quvvat`)).join('')}</div><div class="bar-track" aria-label="Veb-quvvatga nisbatan yuklama"><div class="bar-fill" style="width:${Math.min(100,s.demand/web*100)}%"></div></div><p style="text-align:center;margin-bottom:0">Veb-quvvat: <strong>${web} so‘rov/s</strong> → Umumiy baza: <strong>${s.db} so‘rov/s</strong></p>`;
+      q('[data-status]').textContent = s.demand > throughput ? `Navbat har soniyada kamida ${s.demand-throughput} taga o‘sadi. Asosiy cheklov: ${bottleneck?'umumiy ma’lumotlar bazasi':'veb-nusxalar quvvati'}.` : `Keluvchi yuklama shartli ${throughput} so‘rov/s quvvatdan oshmayapti. Mavjud navbat bo‘lsa, bo‘sh quvvat uni kamaytiradi.`;
+      q('[data-run]').textContent = timer ? 'Pauza' : 'Boshlash';
+    }
+    function step() { const s=values(); elapsed++; const available=queue+s.demand, done=Math.min(available,s.replicas*s.capacity,s.db); completed+=done; queue=available-done; render(); }
+    function stop() { if(timer)clearInterval(timer); timer=null; }
+    root.addEventListener('input', render);
+    q('[data-mode]').addEventListener('change',()=>{if(q('[data-mode]').value==='vertical')q('[data-replicas]').value='1';render();});
+    q('[data-run]').addEventListener('click',()=>{if(timer)stop();else timer=setInterval(step,750);render();});
+    q('[data-step]').addEventListener('click',()=>{stop();step();});
+    q('[data-bottleneck]').addEventListener('click',()=>{q('[data-db]').value='100';render();});
+    q('[data-reset]').addEventListener('click',()=>{stop();elapsed=queue=completed=0;q('[data-mode]').value='horizontal';q('[data-demand]').value=240;q('[data-replicas]').value=3;q('[data-capacity]').value=100;q('[data-db]').value=600;render();});
+    root._cleanup=stop;
+    root._pause=()=>{stop();render();};
+    root._demoState=()=>({...values(),elapsed,queue,completed,running:!!timer});
+    render();
+  };
+
+  M.mountHpa = function (root) {
+    root.innerHTML = `
+      <div class="demo-controls">
+        <label class="control">Bir Pod CPU requesti <output data-request-out>200m</output><input data-request type="range" min="50" max="500" step="10" value="200"></label>
+        <label class="control">Ilovaning umumiy CPU sarfi <output data-total-out>540m</output><input data-total type="range" min="60" max="3000" step="30" value="540"></label>
+        <label class="control">Maqsad averageUtilization <output data-target-out>60%</output><input data-target type="range" min="20" max="150" step="5" value="60"></label>
+        <label class="control">minReplicas <output data-min-out>3</output><input data-min type="range" min="1" max="8" step="1" value="3"></label>
+        <label class="control">maxReplicas <output data-max-out>6</output><input data-max type="range" min="1" max="12" step="1" value="6"></label>
+        <label class="control">Metrikalar manbasi<select data-metrics-source><option value="ok">CPU metrikasi mavjud</option><option value="missing">Metrika olinmayapti</option><option value="request-missing">CPU request berilmagan</option></select></label>
+      </div>
+      <div class="formula" data-formula></div>
+      <div class="button-row"><button type="button" class="primary" data-decide>HPA qarorini hisoblash</button><button type="button" class="secondary" data-step>Keyingi bosqich</button><button type="button" class="secondary" data-reset>Qayta boshlash</button><button type="button" class="secondary" data-low>Yuklamani kamaytirish</button></div>
+      <div class="metrics" data-metrics></div>
+      <div class="scene"><div class="pod-list" data-pods></div></div>
+      <p class="status" data-status role="status"></p>
+      <ol class="event-log" data-log aria-label="HPA hodisalari"></ol>
+      <p class="note">Bu soddalashtirilgan modelda umumiy CPU sarfi saqlanib, tayyor nusxalar orasida bo‘linadi. HPA qarori davriy bo‘ladi. Real controller tolerans, yetishmayotgan metrikalar, tayyor bo‘lmagan Podlar va masshtablash siyosatlarini ham hisobga oladi. Quvvat va joy yetarli deb olinadi; keyingi namoyishda joy yetishmasligi ko‘rsatiladi.</p>
+      <p class="task"><strong>Tajriba:</strong> boshlang‘ich 90% ko‘rsatkichdan 5 ta replika tavsiyasini oling. Keyin requestni oshiring. CPU sarfi kamaymasdan foiz nima uchun pasaydi? maxReplicas ni 4 qilsangiz qanday cheklov paydo bo‘ladi?</p>`;
+    const q=s=>root.querySelector(s);
+    let ready=3,desired=3,created=3,phase='idle',raw=5,logs=[],time=0,downWait=0;
+    function values(){return {request:+q('[data-request]').value,total:+q('[data-total]').value,target:+q('[data-target]').value,min:+q('[data-min]').value,max:+q('[data-max]').value,source:q('[data-metrics-source]').value};}
+    function calc(){const s=values(),per=s.total/Math.max(ready,1),util=per/s.request*100,recommend=Math.ceil(ready*util/s.target-1e-9);return {...s,per,util,recommend,clamped:Math.max(s.min,Math.min(s.max,recommend))};}
+    function render(){
+      const s=calc();
+      ['request','total'].forEach(k=>q(`[data-${k}-out]`).textContent=`${s[k]}m`);
+      q('[data-target-out]').textContent=`${s.target}%`;q('[data-min-out]').textContent=s.min;q('[data-max-out]').textContent=s.max;
+      q('[data-formula]').innerHTML = s.source==='ok' ? `Bir Ready Pod: <strong>${nfmt(s.per)}m</strong> ÷ ${s.request}m × 100 = <strong>${nfmt(s.util)}%</strong><br>ceil(${ready} × ${nfmt(s.util)} ÷ ${s.target}) = <strong>${s.recommend}</strong> → [${s.min}; ${s.max}] chegarasida <strong>${s.clamped}</strong>` : `<strong>${s.source==='missing'?'Metrika olinmadi':'CPU request aniqlanmagan'}</strong> — CPU utilization asosidagi tavsiya hisoblanmaydi.`;
+      q('[data-metrics]').innerHTML=metric(s.source==='ok'?s.recommend:'—','Hisoblangan tavsiya')+metric(desired,'Belgilangan kerakli son')+metric(`${ready} / ${created}`,'Ready / yaratilgan Podlar');
+      q('[data-pods]').innerHTML=Array.from({length:created},(_,i)=>pod(i+1,i<ready?'ready':phase==='starting'?'starting':'pending',i<ready?`CPU ≈ ${nfmt(s.per)}m`:phase==='starting'?'Startup va readiness kutilmoqda':'Yaratildi · ishga tushishni kutmoqda')).join('');
+      q('[data-decide]').disabled=phase!=='idle';
+      q('[data-step]').disabled=phase==='idle';
+      root.querySelectorAll('input,select').forEach(el=>{el.disabled=phase!=='idle' && !(phase==='down-wait' && el.matches('[data-total]'));});
+      if(phase==='idle')q('[data-status]').textContent=s.source==='ok'?'Parametrlarni o‘zgartiring, so‘ng HPA qarorini hisoblang. Hisob natijasi tayyor Podlar darhol paydo bo‘lganini anglatmaydi.':'Bu CPU metrikasi bo‘yicha masshtablash bajarilmaydi. Muammoni tuzatib, yana hisoblang.';
+      else if(phase==='requested')q('[data-status]').textContent=`HPA kerakli sonni ${desired} qildi. Controller hali yangi Podlarni yaratgani yo‘q.`;
+      else if(phase==='created')q('[data-status]').textContent='Controller yangi Podlarni yaratdi. Ular hali xizmatga tayyor emas.';
+      else if(phase==='starting')q('[data-status]').textContent='Yangi konteynerlar ishga tushmoqda. Ready bo‘lguncha ularga odatdagi Service trafigi yuborilmaydi.';
+      else if(phase==='down-wait')q('[data-status]').textContent=`Yuklama kamaydi. Soddalashtirilgan barqarorlashtirish oynasi: yana ${downWait} qadam. Kerakli son hozircha ${desired}.`;
+      else if(phase==='down-apply')q('[data-status]').textContent=`Barqarorlashtirish oynasi tugadi. HPA kerakli sonni ${desired} qildi; controller ortiqcha Podlarni tugatadi.`;
+      root.dataset.phase=phase;
+    }
+    function log(m){addLog(root,logs,`${++time}. ${m}`);}
+    function decide(){
+      const s=calc();if(s.source!=='ok'){log(s.source==='missing'?'HPA: CPU metrikasi yo‘q. Kerakli son o‘zgarmadi.':'HPA: request yo‘q, CPU foizi aniqlanmagan. Kerakli son o‘zgarmadi.');render();return;}
+      raw=s.recommend;
+      if(s.clamped>ready){desired=s.clamped;phase='requested';log(`HPA: tavsiya ${raw}; chegaralardan so‘ng kerakli son ${desired}.`);}
+      else if(s.clamped<ready){downWait=2;phase='down-wait';log(`HPA: kamaytirish tavsiyasi ${s.clamped}. Barqarorlashtirish uchun ikki o‘quv qadami kutiladi.`);}
+      else{desired=s.clamped;log(`HPA: kerakli son ${desired}; nusxalar sonini o‘zgartirish shart emas.`);}
+      render();
+    }
+    function step(){
+      if(phase==='requested'){created=desired;phase='created';log(`ReplicaSet controlleri ${created-ready} ta yangi Pod yaratdi.`);}
+      else if(phase==='created'){phase='starting';log('Scheduler joylashtirdi; kubelet konteynerlarni ishga tushirmoqda.');}
+      else if(phase==='starting'){ready=created;phase='idle';log(`Readiness muvaffaqiyatli: ${ready} ta Pod trafik oladi. Bir Podga to‘g‘ri kelgan CPU sarfi qayta hisoblandi.`);}
+      else if(phase==='down-wait'){
+        const s=calc();if(s.clamped>=ready){phase='idle';downWait=0;log('Yuklama yana oshdi: kamaytirish bekor qilindi.');}
+        else if(--downWait<=0){desired=s.clamped;phase='down-apply';log(`HPA: kutish tugadi, kerakli son ${desired}.`);}else log('Barqarorlashtirish: past yuklama yana bir qadam davom etdi.');
+      } else if(phase==='down-apply'){created=ready=desired;phase='idle';log(`Controller ortiqcha Podlarni tugatdi. ${ready} ta tayyor nusxa qoldi.`);}
+      render();
+    }
+    root.addEventListener('input',e=>{if(e.target===q('[data-min]')&&+q('[data-min]').value>+q('[data-max]').value)q('[data-max]').value=q('[data-min]').value;if(e.target===q('[data-max]')&&+q('[data-max]').value<+q('[data-min]').value)q('[data-min]').value=q('[data-max]').value;render();});
+    q('[data-metrics-source]').addEventListener('change',render);
+    q('[data-decide]').addEventListener('click',decide);q('[data-step]').addEventListener('click',step);
+    q('[data-low]').addEventListener('click',()=>{q('[data-total]').value=180;render();if(phase==='idle')decide();});
+    q('[data-reset]').addEventListener('click',()=>{ready=desired=created=3;phase='idle';raw=5;logs=[];time=downWait=0;q('[data-request]').value=200;q('[data-total]').value=540;q('[data-target]').value=60;q('[data-min]').value=3;q('[data-max]').value=6;q('[data-metrics-source]').value='ok';q('[data-log]').innerHTML='';render();});
+    root._demoState=()=>({...values(),ready,desired,created,phase,raw,...calc()});
+    render();
+  };
+
+  M.mountNodes = function (root) {
+    root.innerHTML=`
+      <div class="demo-controls">
+        <label class="control">Kerakli Podlar soni <output data-desired-out>5</output><input data-desired type="range" min="3" max="9" value="5"></label>
+        <label class="control">Yangi Pod CPU requesti <output data-request-out>200m</output><input data-request type="range" min="100" max="800" step="100" value="200"></label>
+        <label class="control">Yangi tugunning ajratiladigan CPU sig‘imi <output data-capacity-out>600m</output><input data-capacity type="range" min="300" max="1800" step="100" value="600"></label>
+        <label class="control">Maksimal tugunlar<select data-limit><option value="1">1 ta — yangi tugun taqiqlangan</option><option value="2" selected>2 ta</option><option value="3">3 ta</option><option value="4">4 ta</option></select></label>
+        <label class="control">Node autoscaler<select data-enabled><option value="on">Yoqilgan</option><option value="off">O‘chirilgan</option></select></label>
+        <label class="control">Yangi Podning joylashish talabi<select data-compatible><option value="yes">Tugun turiga mos</option><option value="no">Mavjud tugun turiga mos emas</option></select></label>
+      </div>
+      <div class="button-row"><button type="button" class="primary" data-step>Keyingi bosqich</button><button type="button" class="secondary" data-reset>Qayta boshlash</button></div>
+      <div class="metrics" data-metrics></div>
+      <div class="scene"><div class="node-grid" data-nodes></div><div data-pending></div></div>
+      <p class="status" data-status role="status"></p>
+      <ol class="event-log" data-log aria-label="Joylashtirish hodisalari"></ol>
+      <p class="note">Boshlang‘ich Node 1 sig‘imi 600m; undagi uchta Podning har biri 200m requestga ega. Parametrlar yangi Pod va yangi tugunga tegishli. Sig‘im boshqa workloadlar va tizim xarajatlaridan keyin portal uchun qolgan ajratiladigan CPUdir. Joylashtirish requestga asoslanadi. Model xotira, disk va boshqa cheklovlarni hisoblamaydi.</p>
+      <p class="task"><strong>Tajriba:</strong> 5 ta Poddan 2 tasi nega joy kutayotganini aniqlang. Autoscalerni o‘chirib yoki maksimal tugunlar sonini 1 qilib qayta ko‘ring. Mos kelmaydigan talabda yangi tugun nega yordam bermaydi?</p>`;
+    const q=s=>root.querySelector(s);
+    let nodes=[],pods=[],phase='initial',logs=[],count=0,provision=false;
+    function values(){return {desired:+q('[data-desired]').value,request:+q('[data-request]').value,capacity:+q('[data-capacity]').value,limit:+q('[data-limit]').value,enabled:q('[data-enabled]').value==='on',compatible:q('[data-compatible]').value==='yes'};}
+    function log(m){addLog(root,logs,`${++count}. ${m}`);}
+    function init(){nodes=[{id:1,capacity:600}];pods=Array.from({length:3},(_,i)=>({id:i+1,node:1,state:'ready',request:200}));phase='initial';logs=[];count=0;provision=false;q('[data-log]').innerHTML='';delete root.dataset.blocked;render();}
+    function render(){
+      const s=values();q('[data-desired-out]').textContent=s.desired;q('[data-request-out]').textContent=`${s.request}m`;q('[data-capacity-out]').textContent=`${s.capacity}m`;
+      const pending=pods.filter(p=>!p.node),ready=pods.filter(p=>p.state==='ready').length;
+      q('[data-metrics]').innerHTML=metric(nodes.length+(provision?' + 1':''),'Tayyor tugunlar'+(provision?' + yaratilmoqda':''))+metric(`${ready} / ${s.desired}`,'Ready / kerakli Podlar')+metric(pending.length,'Joylashtirilmagan Podlar');
+      q('[data-nodes]').innerHTML=nodes.map(n=>{const assigned=pods.filter(p=>p.node===n.id),used=assigned.reduce((a,p)=>a+p.request,0);return `<div class="node"><div class="node-head"><strong>Node ${n.id}</strong><span>${used}m / ${n.capacity}m request</span></div><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,used/n.capacity*100)}%"></div></div><div class="pod-list">${assigned.map(p=>pod(p.id,p.state,`${p.state==='ready'?'Ready':'Startup'} · request ${p.request}m`)).join('')}</div></div>`;}).join('')+(provision?'<div class="node"><div class="node-head"><strong>Yangi Node</strong><span>Infrastruktura tayyorlamoqda…</span></div><p>Hali scheduler uchun tayyor emas</p></div>':'');
+      q('[data-pending]').innerHTML=pending.length?`<p><strong>Joylashtirishni kutayotgan Podlar</strong></p><div class="pod-list">${pending.map(p=>pod(p.id,'pending',`request ${p.request}m · ${s.compatible?'bo‘sh sig‘im kerak':'mos tugun turi topilmadi'}`)).join('')}</div>`:'';
+      const messages={initial:'Boshlang‘ich holat: 3 ta Ready Pod. Keyingi bosqichda HPA kerakli nusxalar sonini belgilaydi.',requested:'Kerakli son o‘zgardi. Keyingi qadamda controller yangi Podlarni yaratadi.',pending:'Scheduler joy izlamoqda. Yetarli request sig‘imi bo‘lmagan Podlar Pending holatida qoladi.',provisioning:'Node autoscaler infratuzilmadan yangi tugun so‘radi. Tugun darhol tayyor bo‘lmaydi.',nodeReady:'Yangi tugun Ready. Endi scheduler Podlarni unga joylashtirishi mumkin.',scheduled:'Podlar tugunga biriktirildi, lekin ilova hali startup bosqichida.',done:pending.length?'Hali joy kutayotgan Podlar bor. Keyingi qadamda yana imkoniyat tekshiriladi.':'Barcha kerakli Podlar Ready. Service yangi tayyor nusxalarga ham trafik yuboradi.'};
+      if(!root.dataset.blocked)q('[data-status]').textContent=messages[phase]||messages.pending;
+      root.querySelectorAll('input,select').forEach(el=>{el.disabled=['requested','provisioning','nodeReady','scheduled'].includes(phase);});
+      root.dataset.phase=phase;
+    }
+    function schedule(){const s=values();if(!s.compatible)return;pods.filter(p=>!p.node).forEach(p=>{const n=nodes.find(n=>n.capacity-pods.filter(x=>x.node===n.id).reduce((sum,x)=>sum+x.request,0)>=p.request);if(n){p.node=n.id;p.state='starting';}});}
+    function step(){
+      const s=values();delete root.dataset.blocked;
+      if(phase==='initial'){phase='requested';log(`HPA: kerakli replikalar soni ${s.desired}.`);}
+      else if(phase==='requested'){for(let i=pods.length;i<s.desired;i++)pods.push({id:i+1,node:null,state:'pending',request:s.request});schedule();phase='pending';log('ReplicaSet yangi Podlarni yaratdi; scheduler mavjud sig‘imni tekshirdi.');}
+      else if(phase==='pending'||phase==='done'){
+        const waiting=pods.filter(p=>!p.node);
+        if(pods.some(p=>p.state==='starting')){phase='scheduled';log('Joylashtirilgan Podlar startup va readiness tekshiruvini kutmoqda.');}
+        else if(!waiting.length){phase='done';log('Barcha kerakli Podlar tayyor.');}
+        else if(!s.enabled){root.dataset.blocked='true';q('[data-status]').textContent='Node autoscaler o‘chirilgan. Pending Podlar uchun yangi tugun so‘ralmaydi.';log('Node autoscaler yo‘q: Podlar joy kutmoqda.');}
+        else if(!s.compatible){root.dataset.blocked='true';q('[data-status]').textContent='Mavjud tugun turi Pod talabiga mos emas. Shu turdan yana tugun qo‘shish yordam bermaydi.';log('Mos tugun turi yo‘q: infratuzilma talabi yoki Pod cheklovini tuzatish kerak.');}
+        else if(s.request>s.capacity){root.dataset.blocked='true';q('[data-status]').textContent='Bitta Pod requesti yangi tugunning butun sig‘imidan katta. Kattaroq mos tugun kerak.';log('Pod yangi tugunga ham sig‘maydi.');}
+        else if(nodes.length>=s.limit){root.dataset.blocked='true';q('[data-status]').textContent='Maksimal tugunlar soniga yetilgan. Limit yoki sig‘imni o‘zgartiring.';log('Tugun limiti sabab yangi tugun ajratilmadi.');}
+        else{provision=true;phase='provisioning';log('Node autoscaler: joylashtirib bo‘lmayotgan Podlar uchun yangi tugun so‘raldi.');}
+      }else if(phase==='provisioning'){nodes.push({id:nodes.length+1,capacity:s.capacity});provision=false;phase='nodeReady';log(`Infratuzilma Node ${nodes.length} ni tayyorladi.`);}
+      else if(phase==='nodeReady'){schedule();phase='scheduled';log('Scheduler Pending Podlarni mos bo‘sh joylarga biriktirdi.');}
+      else if(phase==='scheduled'){pods.filter(p=>p.state==='starting').forEach(p=>p.state='ready');phase='done';log('Kubelet ishga tushirdi; readiness muvaffaqiyatli. Yangi nusxalar trafik oladi.');}
+      render();
+    }
+    root.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',()=>{
+      // Restart the experiment when resource assumptions change. Existing Pods
+      // retain their original requests; the controls describe new Pods and nodes.
+      if(el.matches('[data-desired],[data-request],[data-capacity]')){
+        init();
+      }else{delete root.dataset.blocked;render();}
+    }));
+    q('[data-step]').addEventListener('click',step);
+    q('[data-reset]').addEventListener('click',()=>{q('[data-desired]').value=5;q('[data-request]').value=200;q('[data-capacity]').value=600;q('[data-limit]').value=2;q('[data-enabled]').value='on';q('[data-compatible]').value='yes';delete root.dataset.blocked;init();});
+    root._demoState=()=>({...values(),nodes:nodes.map(x=>({...x})),pods:pods.map(x=>({...x})),phase,provision});
+    init();
+  };
+})();
+
+(function () {
+  'use strict';
+  window.M13 = window.M13 || {};
+  const esc = value => String(value).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  const metric = (value, label) => `<div class="metric"><strong>${value}</strong><span>${label}</span></div>`;
+
+  window.M13.mountProbes = function (root) {
+    root.classList.add('m13-probe-demo');
+    root.innerHTML = `
+      <p class="task"><strong>Tajriba.</strong> Avval ilovani tayyorlang. So‘ng readiness xatosini va qotib qolishni alohida yoqing. Trafik hamda restart sonini taqqoslang.</p>
+      <div class="demo-controls">
+        <label class="control">Ilova boshlanishi, soniya<input data-setting="duration" type="number" min="1" max="180" value="12"></label>
+        <label class="control">Startup davri, soniya<input data-setting="startupPeriod" type="number" min="1" max="30" value="5"></label>
+        <label class="control">Startup xatolar chegarasi<input data-setting="startupThreshold" type="number" min="1" max="40" value="24"></label>
+        <label class="control">Readiness davri, soniya<input data-setting="readyPeriod" type="number" min="1" max="30" value="5"></label>
+        <label class="control">Readiness xatolar chegarasi<input data-setting="readyThreshold" type="number" min="1" max="10" value="3"></label>
+        <label class="control">Liveness davri, soniya<input data-setting="livePeriod" type="number" min="1" max="30" value="10"></label>
+        <label class="control">Liveness xatolar chegarasi<input data-setting="liveThreshold" type="number" min="1" max="10" value="3"></label>
+        <label class="control">Timeout, soniya<input data-setting="timeout" type="number" min="1" max="10" value="2"></label>
+        <label class="control">Oddiy javob vaqti, soniya<input data-setting="latency" type="number" min="0.1" max="12" step="0.1" value="0.2"></label>
+      </div>
+      <div class="button-row">
+        <button type="button" class="primary" data-action="play">Boshlash</button>
+        <button type="button" class="secondary" data-action="step">1 soniya</button>
+        <button type="button" class="secondary" data-action="slow">Sekin startup</button>
+        <button type="button" class="secondary" data-action="ready" aria-pressed="false">Readiness xatosi: o‘chiq</button>
+        <button type="button" class="secondary" data-action="hang" aria-pressed="false">Ilovani qotirish: o‘chiq</button>
+        <button type="button" class="secondary" data-action="reset">Qayta boshlash</button>
+      </div>
+      <div class="metrics" data-ui="metrics"></div>
+      <div class="scene" data-ui="scene"></div>
+      <div class="table-wrap"><table class="mini-table"><thead><tr><th>Probe</th><th>Holat</th><th>Ketma-ket xatolar</th><th>So‘nggi tekshiruvlar</th></tr></thead><tbody data-ui="rows"></tbody></table></div>
+      <p class="note">Vaqt tezlashtirilgan o‘quv modeli. Har qadam 1 virtual soniya; natijalar butun soniyalarda qayd qilinadi. Timeout uchala probe uchun bir xil olingan. Haqiqiy kubelet jadvali va to‘liq tiklanish vaqti farq qiladi. Parametr o‘zgarsa tajriba yangi sozlama bilan boshlanadi.</p>
+      <ol class="event-log" data-ui="log" aria-label="Probe hodisalari"></ol>
+      <style>.m13-probe-demo .probe-history{display:flex;gap:4px;flex-wrap:wrap}.m13-probe-demo .probe-tick{display:inline-flex;align-items:center;justify-content:center;min-width:26px;min-height:26px;border-radius:5px;font-size:.8rem;background:var(--soft,#edf2f7)}.m13-probe-demo .probe-tick.ok{color:#12653c;background:#e4f6ec}.m13-probe-demo .probe-tick.bad{color:#9b2334;background:#fce8ec}.m13-probe-demo .probe-status{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.m13-probe-demo .probe-link{font-size:1.5rem}.m13-probe-demo .probe-label{font-size:.85rem;display:block;margin-top:4px}</style>`;
+    const q = s => root.querySelector(s);
+    const defaults = { duration:12, startupPeriod:5, startupThreshold:24, readyPeriod:5, readyThreshold:3, livePeriod:10, liveThreshold:3, timeout:2, latency:0.2 };
+    let config = { ...defaults }, timer = null, state;
+    function probe(name) { return { name, fail:0, last:'Kutilmoqda', history:[], next:config[name+'Period'], pending:null }; }
+    function log(message) { state.log.unshift(`${state.time} s · ${message}`); state.log = state.log.slice(0,10); }
+    function pause() { if (timer) { clearInterval(timer); timer = null; } }
+    function initialize() {
+      pause();
+      state = { time:0, born:0, startup:false, ready:false, readyFault:false, hung:false, restarts:0, log:[], startupProbe:probe('startup'), readyProbe:probe('ready'), liveProbe:probe('live') };
+      log('Konteyner ishga tushdi. Startup tugamaguncha readiness va liveness kutadi.');
+      render();
+    }
+    function restart(reason) {
+      state.restarts += 1; state.born = state.time; state.startup = false; state.ready = false; state.hung = false;
+      ['startup','ready','live'].forEach(name => { const p=state[name+'Probe']; p.fail=0; p.pending=null; p.next=state.time+config[name+'Period']; p.last='Yangi konteyner kutilmoqda'; });
+      log(`${reason} Kubelet konteynerni qayta ishga tushirdi; Pod o‘zgarmadi. Startup yana boshlanadi.`);
+    }
+    function outcome(name) {
+      const started = state.time-state.born >= config.duration;
+      if (config.latency > config.timeout || state.hung) return { ok:false, wait:config.timeout, why:'timeout' };
+      if (name==='startup') return { ok:started, wait:config.latency, why:started?'HTTP 200':'HTTP 503' };
+      if (name==='ready') return { ok:!state.readyFault, wait:config.latency, why:state.readyFault?'HTTP 503':'HTTP 200' };
+      return { ok:true, wait:config.latency, why:'HTTP 200' };
+    }
+    function launch(name) {
+      const p=state[name+'Probe'], result=outcome(name);
+      p.pending={ ...result, finish:state.time+Math.max(1,Math.ceil(result.wait)), started:state.time };
+      p.next=state.time+config[name+'Period'];
+      p.last='Tekshirilmoqda…';
+    }
+    function finish(name) {
+      const p=state[name+'Probe'], result=p.pending;
+      if (!result || state.time<result.finish) return false;
+      p.pending=null; p.history.push({time:state.time,ok:result.ok,why:result.why}); p.history=p.history.slice(-9);
+      p.last=`${result.ok?'Muvaffaqiyat':'Xato'} · ${result.why}`;
+      p.fail=result.ok?0:p.fail+1;
+      if (name==='startup' && result.ok) {
+        state.startup=true; state.readyProbe.next=state.time; state.liveProbe.next=state.time;
+        log('Startup muvaffaqiyatli. Readiness va liveness endi mustaqil ishlaydi.');
+      } else if (name==='ready') {
+        if (result.ok && !state.ready) { state.ready=true; log('Readiness muvaffaqiyatli: Ready=true, odatiy Service trafigi qo‘shildi.'); }
+        if (!result.ok && p.fail>=config.readyThreshold && state.ready) { state.ready=false; log('Readiness chegarasi: trafikdan chiqarildi. Konteyner restart qilinmadi.'); }
+      }
+      if (!result.ok && name!=='ready' && p.fail>=config[name+'Threshold']) {
+        restart(`${name==='startup'?'Startup':'Liveness'} ketma-ket xatolar chegarasiga yetdi.`); return true;
+      }
+      return false;
+    }
+    function step() {
+      state.time+=1;
+      if (!state.startup) {
+        if (finish('startup')) { render();return; }
+        if (!state.startup && !state.startupProbe.pending && state.time>=state.startupProbe.next) launch('startup');
+      }
+      if (state.startup) {
+        finish('ready');
+        if (finish('live')) { render();return; }
+        ['ready','live'].forEach(name => { const p=state[name+'Probe']; if (!p.pending && state.time>=p.next) launch(name); });
+      }
+      render();
+    }
+    function render() {
+      q('[data-ui="metrics"]').innerHTML=metric(`${state.time} s`,'Virtual vaqt')+metric(state.ready?'Ready':'NotReady','Pod tayyorligi')+metric(state.restarts,'Konteyner restarti');
+      const phase=!state.startup?'Startup davom etmoqda':state.hung?'Jarayon qotgan':state.readyFault?'Readiness manzili xato qaytarmoqda':'Ilova ishlayapti';
+      q('[data-ui="scene"]').innerHTML=`<div class="probe-status"><div class="pod ${state.ready?'ready':state.hung?'failed':'starting'}"><strong>Pod portal-1</strong><span class="probe-label">${esc(phase)}</span></div><span class="probe-link" aria-hidden="true">${state.ready?'←':'⊘'}</span><div><strong>Service</strong><span class="probe-label">${state.ready?'Yangi trafik yo‘naltiriladi':'Yangi trafik yo‘naltirilmaydi'}</span></div></div>`;
+      q('[data-ui="rows"]').innerHTML=['startup','ready','live'].map(name=>{
+        const p=state[name+'Probe'];
+        const label=name==='startup'?'Startup':name==='ready'?'Readiness':'Liveness';
+        let status=p.last;
+        if (name==='startup' && state.startup) status='Tugadi — qayta tekshirilmaydi';
+        if (name!=='startup' && !state.startup) status='Startup muvaffaqiyatini kutmoqda';
+        const history=p.history.map(h=>`<span class="probe-tick ${h.ok?'ok':'bad'}" title="${h.time} s: ${h.why}" aria-label="${h.time} soniya, ${h.ok?'muvaffaqiyat':'xato'}, ${h.why}">${h.ok?'✓':'×'}</span>`).join('')||'—';
+        return `<tr><th scope="row">${label}</th><td>${esc(status)}</td><td>${p.fail} / ${config[name+'Threshold']}</td><td><div class="probe-history">${history}</div></td></tr>`;
+      }).join('');
+      q('[data-ui="log"]').innerHTML=state.log.map(l=>`<li>${esc(l)}</li>`).join('');
+      const play=q('[data-action="play"]');play.textContent=timer?'Pauza':state.time?'Davom ettirish':'Boshlash';play.setAttribute('aria-pressed',String(Boolean(timer)));
+      const rb=q('[data-action="ready"]');rb.textContent=`Readiness xatosi: ${state.readyFault?'yoqilgan':'o‘chiq'}`;rb.setAttribute('aria-pressed',String(state.readyFault));
+      const hb=q('[data-action="hang"]');hb.textContent=`Ilovani qotirish: ${state.hung?'yoqilgan':'o‘chiq'}`;hb.setAttribute('aria-pressed',String(state.hung));
+    }
+    root.addEventListener('click',e=>{
+      const b=e.target.closest('button[data-action]');if(!b || !root.contains(b))return;
+      switch(b.dataset.action){
+        case 'play':if(timer)pause();else timer=setInterval(step,240);render();break;
+        case 'step':pause();step();break;
+        case 'ready':state.readyFault=!state.readyFault;log(`Readiness xatosi ${state.readyFault?'yoqildi':'o‘chirildi'}. Ta’sir keyingi tekshiruvlarda ko‘rinadi.`);render();break;
+        case 'hang':state.hung=!state.hung;log(state.hung?'Jarayon qotirildi. Readiness va liveness javob kutadi.':'Qotish olib tashlandi. Keyingi probe natijalarini kuzating.');render();break;
+        case 'slow':config.duration=90;q('[data-setting="duration"]').value=90;initialize();log('Sekin startup: ilova 90 soniyada tayyorlanadi. Startup chegarasini kamaytirib taqqoslang.');render();break;
+        case 'reset':config={...defaults};root.querySelectorAll('[data-setting]').forEach(i=>i.value=config[i.dataset.setting]);initialize();break;
+      }
+    });
+    root.querySelectorAll('[data-setting]').forEach(i=>i.addEventListener('change',()=>{
+      const min=Number(i.min),max=Number(i.max),v=Number(i.value);let value=Math.min(max,Math.max(min,Number.isFinite(v)?v:defaults[i.dataset.setting]));if(i.dataset.setting!=='latency')value=Math.round(value);config[i.dataset.setting]=value;i.value=config[i.dataset.setting];initialize();
+    }));
+    root._cleanup=pause;
+    root._pause=()=>{pause();render();};
+    root._demoState=()=>JSON.parse(JSON.stringify({...state,config,running:Boolean(timer)}));
+    initialize();
+  };
+
+  window.M13.mountRecovery = function(root) {
+    root.classList.add('m13-recovery-demo');
+    root.innerHTML=`
+      <p class="task"><strong>Tajriba.</strong> Konteynerni to‘xtating va tiklanishni bir qadamdan kuzating. Keyin Podni yo‘qoting: Pod UID va tugunni solishtiring.</p>
+      <div class="demo-controls"><label class="control">Podni kim boshqaradi?<select data-setting="managed"><option value="yes">Deployment va ReplicaSet</option><option value="no">Controllersiz alohida Pod</option></select></label></div>
+      <div class="button-row">
+        <button type="button" class="danger" data-action="crash">Konteynerni to‘xtatish</button>
+        <button type="button" class="danger" data-action="delete">Podni yo‘qotish</button>
+        <button type="button" class="danger" data-action="node">Tugunni o‘chirish</button>
+        <button type="button" class="secondary" data-action="bad" aria-pressed="false">Konfiguratsiya: to‘g‘ri</button>
+        <button type="button" class="primary" data-action="step">Keyingi qadam</button>
+        <button type="button" class="secondary" data-action="reset">Qayta boshlash</button>
+      </div>
+      <div class="metrics" data-ui="metrics"></div>
+      <div class="scene" data-ui="scene"></div>
+      <p class="status" data-ui="status" role="status"></p>
+      <p class="note">O‘quv modeli: odatiy ilova uchun restartPolicy=Always, yangi Podga mos bo‘sh resurs mavjud. Qadamlar haqiqiy kutish muddatlarini ifodalamaydi. CrashLoopBackOff — konteyner qayta ishga tushishidan oldingi kutish sababi; Podning alohida fazasi emas.</p>
+      <ol class="event-log" data-ui="log" aria-label="Tiklanish hodisalari"></ol>`;
+    const q=s=>root.querySelector(s);let state;
+    function log(text){state.log.unshift(`${state.step}. ${text}`);state.log=state.log.slice(0,9);}
+    function reset(keepManaged){const managed=keepManaged?state.managed:true;state={step:0,uid:1,node:'A',container:1,restarts:0,phase:'ready',bad:false,managed,deadNodes:[],old:null,sequence:[],message:'Pod portal-1 xizmat ko‘rsatmoqda.',log:[]};q('[data-setting="managed"]').value=managed?'yes':'no';log('Pod UID pod-001, Node A, konteyner c-001.');render();}
+    function startRestart(){state.phase='failed';state.sequence=['restart','startup','ready'];state.message='Jarayon to‘xtadi. Pod o‘sha obyekt bo‘lib qoladi; kubelet restart siyosatini qo‘llaydi.';log('Konteyner to‘xtadi. Pod UID va tugun saqlanadi.');}
+    function losePod(nodeFailure){
+      state.old={uid:state.uid,node:state.node};state.phase='off';
+      if(nodeFailure){state.deadNodes.push(state.node);state.sequence=['detect','replace','schedule','startup','ready'];state.message='Tugun javob bermayapti. Avval nosozlik aniqlanadi; eski Pod boshqa tugunga ko‘chirilmaydi.';log(`Node ${state.node} o‘chirildi; eski Pod undan ko‘chirilmaydi.`);}
+      else {state.sequence=['replace','schedule','startup','ready'];state.message='Pod yo‘qoldi. Controller kerakli nusxalar sonini solishtiradi.';log(`Pod pod-${String(state.uid).padStart(3,'0')} yo‘qoldi.`);}
+      if(!state.managed){state.sequence=nodeFailure?['detect']:[];state.message+=' Controllersiz Pod uchun yangi nusxa yaratuvchi Deployment mavjud emas.';}
+    }
+    function next(){
+      state.step++;
+      if(!state.sequence.length){state.message=state.phase==='ready'?'Xizmat tayyor. Nosozlik tugmalaridan birini tanlang.':'Avtomatik keyingi harakat yo‘q. Controllersiz Podni qayta yaratish uchun operator harakati kerak.';render();return;}
+      const action=state.sequence.shift();
+      switch(action){
+        case 'detect':state.message='Nosoz tugun aniqlandi. Tegishli boshqaruv jarayonlari bajariladi.';log(state.message);if(!state.managed)state.message+=' Controllersiz Pod uchun yangi nusxa yaratilmaydi.';break;
+        case 'replace':state.uid++;state.restarts=0;state.container=0;state.node='—';state.phase='pending';state.message='ReplicaSet yangi UID bilan yangi Pod yaratdi. Scheduler tugun tanlaydi.';log(`Yangi obyekt: pod-${String(state.uid).padStart(3,'0')}.`);break;
+        case 'schedule':{
+          let index=0;
+          const labelFor=i=>i<26?String.fromCharCode(65+i):`N${i+1}`;
+          while(state.deadNodes.includes(labelFor(index)))index++;
+          state.node=labelFor(index);state.phase='starting';state.message=`Scheduler yangi Podni mos Node ${state.node} ga biriktirdi. Eski Pod ko‘chirilgani yo‘q.`;log(state.message);break;
+        }
+        case 'restart':state.restarts++;state.container++;state.phase='starting';state.message='Kubelet yangi konteyner ishga tushirdi. Pod UID va tugun o‘zgarmadi.';log(`Konteyner restarti #${state.restarts}.`);break;
+        case 'startup':if(state.container===0)state.container=1;state.phase='starting';state.message='Konteyner ishga tushmoqda, startup va readiness tugashini kutmoqda.';log(state.message);break;
+        case 'ready':
+          if(state.bad){state.phase='failed';state.sequence=['backoff','restart','startup','ready'];state.message='Noto‘g‘ri konfiguratsiya yangi konteynerda ham saqlanib qoldi. Dastur yana xato bilan tugadi.';log('Takroriy xato: konfiguratsiya o‘zgarmagan.');}
+          else {state.phase='ready';state.sequence=[];state.message='Konteyner ishga tushdi va Pod Ready bo‘ldi. Service yangi trafikni yo‘naltiradi.';log('Ready=true; xizmat tiklandi.');}break;
+        case 'backoff':state.phase='failed';state.message='CrashLoopBackOff: keyingi konteyner restartidan oldin kutish. Sababni tuzatish kerak.';log(state.message);break;
+      }
+      render();
+    }
+    function render(){
+      q('[data-ui="metrics"]').innerHTML=metric(state.phase==='off'?'—':`pod-${String(state.uid).padStart(3,'0')}`,'Joriy Pod UID')+metric(state.phase==='off'?'—':`Node ${esc(state.node)}`,'Joriy tugun')+metric(state.restarts,'Joriy Poddagi restartlar');
+      const label={ready:'Ready — trafik bor',failed:'Konteyner ishlamayapti',off:'Eski Pod mavjud emas',pending:'Pending — tugun kutilmoqda',starting:'Tayyorlanmoqda — trafik yo‘q'}[state.phase];
+      const current=state.phase==='off'?`<div class="node"><div class="node-head">Boshqaruv jarayoni</div><div class="pod-list"><div class="pod pending"><strong>Yangi Pod hali yo‘q</strong><span>${state.managed?'Controller bosqichlarini kuzating':'Yangi nusxa yaratuvchi controller yo‘q'}</span></div></div></div>`:`<div class="node"><div class="node-head">${state.node==='—'?'Scheduler navbati':`Node ${esc(state.node)}`}</div><div class="pod-list"><div class="pod ${state.phase}"><strong>Pod ${state.uid}</strong><span>${label}</span><small>Konteyner c-${String(state.uid).padStart(3,'0')}-${String(state.container).padStart(2,'0')}</small></div></div></div>`;
+      const old=state.old?`<div class="node"><div class="node-head">Eski Node ${esc(state.old.node)} ${state.deadNodes.includes(state.old.node)?'— nosoz':''}</div><div class="pod-list"><div class="pod off"><strong>Eski Pod ${state.old.uid}</strong><span>UID saqlanib ko‘chmaydi</span></div></div></div>`:'';
+      q('[data-ui="scene"]').innerHTML=`<div class="node-grid">${old}${current}</div>`;
+      q('[data-ui="status"]').textContent=state.message;
+      q('[data-ui="log"]').innerHTML=state.log.map(l=>`<li>${esc(l)}</li>`).join('');
+      const bad=q('[data-action="bad"]');bad.textContent=state.bad?'Konfiguratsiyani tuzatish':'Konfiguratsiyani buzish';bad.setAttribute('aria-pressed',String(state.bad));
+      const busy=state.sequence.length>0 || state.phase!=='ready';
+      ['crash','delete','node'].forEach(a=>q(`[data-action="${a}"]`).disabled=busy);
+      q('[data-action="step"]').disabled=state.sequence.length===0;
+    }
+    root.addEventListener('click',e=>{
+      const b=e.target.closest('button[data-action]');if(!b||!root.contains(b))return;
+      switch(b.dataset.action){
+        case 'crash':state.step++;startRestart();render();break;
+        case 'delete':state.step++;losePod(false);render();break;
+        case 'node':state.step++;losePod(true);render();break;
+        case 'step':next();break;
+        case 'bad':state.bad=!state.bad;state.step++;if(state.bad){if(state.phase==='ready')startRestart();log('Konfiguratsiya buzildi; restart sababni tuzatmaydi.');}else{state.message='Konfiguratsiya tuzatildi. Keyingi ishga tushirish bosqichlarini davom ettiring.';log('Operator noto‘g‘ri konfiguratsiyani tuzatdi.');}render();break;
+        case 'reset':reset(true);break;
+      }
+    });
+    q('[data-setting="managed"]').addEventListener('change',e=>{state.managed=e.target.value==='yes';reset(true);});
+    root._demoState=()=>JSON.parse(JSON.stringify(state));root._cleanup=()=>{};
+    reset(false);
+  };
+})();
+
+(function () {
+  'use strict';
+  const M = window.M13 = window.M13 || {};
+  const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const metric = (value,label) => `<div class="metric"><strong>${esc(value)}</strong><span>${esc(label)}</span></div>`;
+  const logs = items => items.slice(-8).reverse().map(x=>`<li>${esc(x)}</li>`).join('');
+  const stateGetter = (root,fn) => Object.defineProperty(root,'_demoState',{configurable:true,get:()=>JSON.parse(JSON.stringify(fn()))});
+
+  M.mountPdb = function(root) {
+    root.innerHTML = `<div class="demo-controls"><label class="control">Kerakli replikalar <select data-replicas><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option></select></label><label class="control">PDB minAvailable <input data-min type="number" min="0" max="6" value="2"></label></div><div class="metrics" data-metrics></div><div class="scene" data-scene></div><p class="status" data-status role="status" aria-live="polite"></p><div class="button-row"><button type="button" class="primary" data-action="evict">Sog‘lom Podni Eviction API orqali chiqarish</button><button type="button" class="secondary" data-action="ready">Yangi Podlarni Ready qilish</button><button type="button" class="danger" data-action="node">Node A kutilmaganda o‘chsin</button><button type="button" class="secondary" data-action="delete">Podni bevosita o‘chirish</button><button type="button" class="secondary" data-action="scale">Kerakli sonni 1 taga kamaytirish</button><button type="button" class="secondary" data-action="reset">Qayta boshlash</button></div><p class="note">Model sog‘lom Podni chiqarishni tekshiradi. Noso‘g‘lom Pod evictioni alohida siyosatga bog‘liq. “1 taga kamaytirish” tajribasi HPA minReplicas chegarasi ham 1 ga o‘zgartirilgan deb oladi; ma’ruzadagi 3–6 chegarali HPA bunday kamaytirmaydi.</p><ol class="event-log" data-log aria-label="PDB hodisalari"></ol><p class="task">Tajriba: bitta Podni chiqaring, yangi Pod tayyor bo‘lmasdan yana chiqaring. Keyin “Ready qilish” tugmasini bosing va qayta urinib ko‘ring.</p>`;
+    const q = x => root.querySelector(x);
+    let s;
+    function reset(n=3,min=2) {s={desired:n,min,pods:Array.from({length:n},(_,i)=>({id:i+1,state:'ready',node:String.fromCharCode(65+i%3)})),next:n+1,retired:[],nodeA:true,log:['Boshlanish: '+n+' ta Ready Pod.'],message:'Eviction API orqali sog‘lom Podni chiqarib ko‘ring.'}; q('[data-replicas]').value=n;q('[data-min]').value=min;render();}
+    function healthy(){return s.pods.filter(p=>p.state==='ready').length;}
+    function record(text){s.message=text;s.log.push(text);}
+    function replace(p,why){s.pods=s.pods.filter(x=>x!==p);s.retired.push({id:p.id,node:p.node,why}); if(s.pods.length<s.desired)s.pods.push({id:s.next++,node:s.nodeA?'B':'C',state:'starting'});}
+    function render(){const h=healthy(),allowed=Math.max(0,h-s.min);q('[data-metrics]').innerHTML=metric(h,'currentHealthy · Ready')+metric(s.min,'desiredHealthy · talab')+metric(allowed,'disruptionsAllowed');q('[data-status]').textContent=s.message;q('[data-log]').innerHTML=logs(s.log);q('[data-scene]').innerHTML=`<div class="node-grid">${['A','B','C'].map(n=>`<div class="node"><div class="node-head">Node ${n}${n==='A'&&!s.nodeA?' · O‘chiq':''}</div><div class="pod-list">${s.pods.filter(p=>p.node===n).map(p=>`<div class="pod ${p.state}"><strong>Pod ${p.id}</strong><span>${p.state==='ready'?'Ready':'Tayyorlanmoqda'}</span><small>UID: pdb-${p.id}</small></div>`).join('')||'<span class="note">Faol Pod yo‘q</span>'}</div></div>`).join('')}</div>${s.retired.length?`<p class="note">Oldingi obyektlar: ${s.retired.slice(-4).map(p=>`Pod ${p.id} (${esc(p.why)})`).join('; ')}.</p>`:''}`;q('[data-action="ready"]').disabled=!s.pods.some(p=>p.state==='starting');q('[data-action="node"]').disabled=!s.nodeA;}
+    q('[data-replicas]').addEventListener('change',()=>reset(Number(q('[data-replicas]').value),s.min));
+    q('[data-min]').addEventListener('change',()=>{const val=Number(q('[data-min]').value);s.min=Number.isFinite(val)?Math.max(0,Math.min(6,Math.round(val))):2;q('[data-min]').value=s.min;record('PDB talabi '+s.min+' ta sog‘lom Podga o‘zgardi. Replika soni avtomatik oshmadi.');render();});
+    root.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const action=b.dataset.action,p=s.pods.find(p=>p.state==='ready');if(action==='reset'){reset();return;}if(action==='evict'){if(!p)record('Chiqariladigan sog‘lom Pod yo‘q.');else if(healthy()-1<s.min)record('Eviction rad etildi: yana bitta sog‘lom Pod chiqarilsa, PDB talabi buziladi. Yangi Pod Ready bo‘lishini kuting.');else{replace(p,'Eviction API');record('Eviction API ruxsat berdi. Pod '+p.id+' chiqarildi; controller yangi Pod yaratdi, u hali Ready emas.');}}if(action==='ready'){s.pods.forEach(p=>{if(p.state==='starting')p.state='ready';});record('Kubelet tekshiruvlari muvaffaqiyatli: yangi Podlar Ready. Eviction budjeti qayta hisoblandi.');}if(action==='delete'){if(!p)record('Bevosita o‘chirish uchun sog‘lom Pod yo‘q.');else{replace(p,'bevosita o‘chirildi');record('Pod '+p.id+' bevosita o‘chirildi: PDB tekshiruvi qo‘llanmadi. Controller almashtiruvchi Pod yaratdi.');}}if(action==='node'){s.nodeA=false;const affected=s.pods.filter(p=>p.node==='A');affected.forEach(p=>replace(p,'Node A nosozligi'));record('Node A kutilmaganda o‘chdi. PDB buni to‘xtatmadi. Nosozlik aniqlangach yangi Podlar yaratildi; hali tayyor emas.');}if(action==='scale'){s.desired=1;s.pods=s.pods.slice(0,1);q('[data-replicas]').value='1';record('HPA quyi chegarasi 1 deb olingan tajriba: kerakli son 1 bo‘ldi. PDB minAvailable='+s.min+' buni to‘xtatmadi; PDB minimal replika sonini belgilamaydi.');}render();});
+    stateGetter(root,()=>({...s,healthy:healthy(),allowed:Math.max(0,healthy()-s.min)})); reset();
+  };
+
+  M.mountHa = function(root) {
+    root.innerHTML=`<div class="demo-controls"><label class="control">Yuklama <span><output data-demand-value>180</output> so‘rov/s</span><input data-demand type="range" min="50" max="500" step="10" value="180"></label><label class="control">Bitta Pod quvvati <span><output data-cap-value>100</output> so‘rov/s</span><input data-cap type="range" min="50" max="150" step="10" value="100"></label></div><div class="button-row"><button type="button" class="danger" data-node aria-pressed="false">Node A ni o‘chirish</button><button type="button" class="danger" data-db aria-pressed="false">Umumiy bazani o‘chirish</button><button type="button" class="secondary" data-reset>Qayta boshlash</button></div><div data-scenes></div><p class="status" data-status role="status" aria-live="polite"></p><p class="note">Shartli quvvat modeli: muvaffaqiyatli so‘rovlar = min(yuklama, qolgan veb-quvvat), baza ishlamasa 0. Bu tajribada veb readiness tekshiruvi bazaga bog‘lanmagan; shuning uchun baza o‘chsa ham Podlar Ready ko‘rinishi mumkin. Real tizimda natija ilova, tarmoq va saqlashga bog‘liq.</p><p class="task">Tajriba: Node A ni o‘chiring. So‘ng yuklamani 300 so‘rov/s ga oshiring. Ikki sog‘lom nusxa qolishi barcha so‘rovlar bajarilishini kafolatlayaptimi?</p>`;
+    const q=x=>root.querySelector(x);let s={demand:180,cap:100,nodeDown:false,dbDown:false};
+    function numbers(spread){const ready=s.nodeDown?(spread?2:0):3;const capacity=ready*s.cap;return{ready,capacity,success:s.dbDown?0:Math.min(s.demand,capacity)};}
+    function panel(spread){const n=numbers(spread);return `<section class="scene"><h4>${spread?'Turli tugunlarga taqsimlangan':'Bitta tugunga to‘plangan'}</h4><div class="node-grid">${['A','B','C'].map((node,i)=>`<div class="node"><div class="node-head">Node ${node} ${node==='A'&&s.nodeDown?'· O‘chiq':''}</div><div class="pod-list">${(spread?[i+1]:(i===0?[1,2,3]:[])).map(id=>`<div class="pod ${node==='A'&&s.nodeDown?'failed':'ready'}"><strong>Pod ${id}</strong><span>${node==='A'&&s.nodeDown?'Mavjud emas':'Ready'}</span></div>`).join('')||'<span class="note">Pod yo‘q</span>'}</div></div>`).join('')}</div><div class="metrics">${metric(n.ready+'/3','Ready veb-Pod')}${metric(n.capacity+' so‘rov/s','Qolgan veb-quvvat')}${metric(n.success+'/'+s.demand,'Bajarilgan so‘rov/s')}</div><div class="bar-track" role="img" aria-label="Bajarilgan so‘rovlar ${Math.round(n.success/s.demand*100)} foiz"><div class="bar-fill" style="width:${n.success/s.demand*100}%"></div></div></section>`;}
+    function render(){q('[data-demand]').value=s.demand;q('[data-cap]').value=s.cap;q('[data-demand-value]').textContent=s.demand;q('[data-cap-value]').textContent=s.cap;q('[data-node]').textContent=s.nodeDown?'Node A ni tiklash':'Node A ni o‘chirish';q('[data-node]').setAttribute('aria-pressed',String(s.nodeDown));q('[data-db]').textContent=s.dbDown?'Umumiy bazani tiklash':'Umumiy bazani o‘chirish';q('[data-db]').setAttribute('aria-pressed',String(s.dbDown));q('[data-scenes]').innerHTML=panel(false)+panel(true);q('[data-status]').textContent=s.dbDown?'Umumiy baza ishlamayapti: veb-Podlar sonidan qat’i nazar foydalanuvchi amali bajarilmadi.':s.nodeDown?'Bir xil nosozlik: to‘plangan joylashuvda 0, tarqatilgan joylashuvda 2 ta Ready Pod qoldi. Qolgan quvvatni ham tekshiring.':'Ikki joylashuvda ham 3 ta Ready Pod bor. Nosozlikni qo‘llab, farqni tekshiring.';}
+    q('[data-demand]').addEventListener('input',e=>{s.demand=Number(e.target.value);render();});q('[data-cap]').addEventListener('input',e=>{s.cap=Number(e.target.value);render();});q('[data-node]').addEventListener('click',()=>{s.nodeDown=!s.nodeDown;render();});q('[data-db]').addEventListener('click',()=>{s.dbDown=!s.dbDown;render();});q('[data-reset]').addEventListener('click',()=>{s={demand:180,cap:100,nodeDown:false,dbDown:false};render();});stateGetter(root,()=>({...s,packed:numbers(false),spread:numbers(true)}));render();
+  };
+
+  M.mountScenario = function(root) {
+    root.innerHTML=`<div class="demo-controls"><label class="control">Hodisa <select data-story><option value="load">Yuklama oshdi va tugunda joy yetmadi</option><option value="readiness">Nusxa vaqtincha tayyor emas</option><option value="hang">Konteyner qotib qoldi</option><option value="node">Node A kutilmaganda o‘chdi</option><option value="maintenance">Texnik xizmat uchun chiqarish</option><option value="database">Umumiy baza ishlamay qoldi</option></select></label><label class="control">Keyingi harakatni kim bajaradi? <select data-guess><option value="">Taxminni tanlang</option><option>HPA</option><option>ReplicaSet controlleri</option><option>Scheduler</option><option>Node autoscaler</option><option>Infrastruktura</option><option>Kubelet</option><option>EndpointSlice va Service</option><option>PDB va Eviction API</option><option>Operator</option></select></label></div><div class="metrics" data-metrics></div><div class="scene" data-scene></div><p class="status" data-status role="status" aria-live="polite"></p><p class="note" data-next></p><div class="button-row"><button type="button" class="primary" data-step>Bir qadam</button><button type="button" class="secondary" data-reset>Ssenariyni qayta boshlash</button></div><ol class="event-log" data-log aria-label="Portal hodisalari"></ol><p class="note">Barcha kechikishlar o‘quv bosqichlari bilan ifodalangan. Boshlang‘ich HPA 3–6, maqsad 60%, PDB minAvailable 2. Tayyorlik, kerakli son va foydalanuvchi natijasi alohida ko‘rsatiladi. Shartli modelda har foydali Pod 100 so‘rov/s bajaradi va trafik Ready deb belgilangan nusxalarga teng taqsimlanadi; haqiqiy taqsimot bunday bo‘lishi shart emas.</p>`;
+    const q=x=>root.querySelector(x);let s,steps;
+    const row=(actor,label,run)=>({actor,label,run});
+    function reset(){const story=q('[data-story]').value;s={story,index:0,desired:3,raw:3,cpu:60,db:true,requests:180,nodeA:true,nodeD:false,nodeDProvisioning:false,pods:[{id:1,node:'A',state:'ready',restart:0},{id:2,node:'B',state:'ready',restart:0},{id:3,node:'C',state:'ready',restart:0}],log:[],message:'Boshlanish: 3 ta Ready Pod. Hodisani ko‘rish uchun birinchi qadamni bajaring.',nextId:4};steps=stories(story);q('[data-guess]').value='';render();}
+    function addPending(n){for(let i=0;i<n;i++)s.pods.push({id:s.nextId++,node:null,state:'pending',restart:0});}
+    function replaceFirst(){s.pods.shift();addPending(1);}
+    function stories(type){if(type==='load')return[
+      row('Operator','Yuklama oshishini kuzatish',()=>{s.cpu=90;s.requests=450;return'Metrika: 3 ta nusxada CPU requestga nisbatan 90%. So‘rovlar ortdi.';}),
+      row('HPA','Metrika asosida kerakli sonni hisoblash',()=>{s.raw=Math.ceil(3*90/60);s.desired=Math.min(6,Math.max(3,s.raw));return'ceil(3 × 90/60) = 5. HPA Deploymentning kerakli sonini 5 ga o‘zgartirdi.';}),
+      row('ReplicaSet controlleri','Yetishmayotgan Podlarni yaratish',()=>{addPending(2);return'Ikki yangi Pod obyekti yaratildi. Ready soni hali 3.';}),
+      row('Scheduler','Yangi Podlar uchun joy qidirish',()=> 'Node A, B va C dagi ajratiladigan resurslar to‘la. Ikki Pod joylashtirilmay Pending holatida qoldi.'),
+      row('Node autoscaler','Mos tugun ajratishni so‘rash',()=>{s.nodeDProvisioning=true;return'Joylashtirib bo‘lmayotgan Podlarning requestlari asosida Node D so‘raldi. U hali tayyor emas.';}),
+      row('Infrastruktura','Yangi tugunni tayyorlash',()=>{s.nodeDProvisioning=false;s.nodeD=true;return'Node D klasterga qo‘shildi va ishga tayyor bo‘ldi. Podlar hali Pending.';}),
+      row('Scheduler','Podlarni mos tugunga biriktirish',()=>{s.pods.filter(p=>p.state==='pending').forEach(p=>{p.node='D';p.state='starting';});return'Yangi Podlar Node D ga biriktirildi. Konteynerlar tayyorlanmoqda.';}),
+      row('Kubelet','Startup va readiness muvaffaqiyati',()=>{s.pods.forEach(p=>{if(p.state==='starting')p.state='ready';});s.cpu=54;return'Yangi konteynerlar ishga tushdi va Ready bo‘ldi. Shartli teng CPU taqsimotida foydalanish 54%.';}),
+      row('EndpointSlice va Service','Yangi tayyor nusxalarni trafik yo‘liga qo‘shish',()=> 'Tayyor endpointlar yangilandi. Endi beshta nusxa orqali xizmat ko‘rsatiladi. Trafik taqsimoti real tizimda mutlaq teng bo‘lishi shart emas.')
+    ];
+    if(type==='readiness')return[
+      row('Operator','Vaqtinchalik tayyorlik muammosini kiritish',()=>{s.pods[0].state='ready-fault';return'Pod 1 jarayoni ishlayapti, ammo /ready javoblari muvaffaqiyatsiz. Tekshiruv chegarasi hali kuzatilmoqda.';}),
+      row('Kubelet','Readiness xatolari chegarasiga yetish',()=>{s.pods[0].state='unready';return'Ketma-ket xatolar chegarasi kuzatildi. Pod 1 Ready emas; restartCount = 0.';}),
+      row('EndpointSlice va Service','Trafik yo‘lini yangilash',()=> 'Pod 1 ga odatiy yangi trafik yuborilmaydi. Qolgan ikki Ready Pod xizmatni davom ettiradi.'),
+      row('Kubelet','Tayyorlik tekshiruvining qayta muvaffaqiyati',()=>{s.pods[0].state='ready';return'/ready muvaffaqiyatli: Pod 1 Ready bo‘ldi. Konteyner qayta ishga tushirilmadi; endpointlar yangilanishi mumkin.';})
+    ];
+    if(type==='hang')return[
+      row('Operator','Ilovani qotirish',()=>{s.pods[0].state='hung';return'Pod 1 ichidagi jarayon bor, lekin oldinga siljimayapti. Foydalanuvchi so‘rovlari shu nusxada xatoga uchrashi mumkin.';}),
+      row('Kubelet','Liveness xatolari chegarasiga yetish',()=>{s.pods[0].state='starting';s.pods[0].restart++;return'Konteyner to‘xtatildi va Always siyosati bo‘yicha qayta ishga tushdi. Pod UID va Node A saqlandi.';}),
+      row('Kubelet','Qayta startup va readiness tekshiruvi',()=>{s.pods[0].state='ready';return'Pod 1 yana Ready. UID o‘sha; container restartCount = 1.';})
+    ];
+    if(type==='node')return[
+      row('Infrastruktura','Node A nosozligi',()=>{s.nodeA=false;s.pods.filter(p=>p.node==='A').forEach(p=>p.state='failed');return'Node A o‘chdi. Pod 1 mavjud emas, B va C dagi ikki nusxa xizmatni davom ettiradi. PDB nosozlikni to‘xtatmadi.';}),
+      row('ReplicaSet controlleri','Nosozlik aniqlangach almashtirish',()=>{s.pods=s.pods.filter(p=>p.node!=='A');addPending(1);return'Nosozlikni aniqlash va tegishli o‘chirish jarayonlaridan keyin bitta yangi UIDli Pod yaratildi. Eski Pod ko‘chirilmaydi.';}),
+      row('Node autoscaler','Joylashtirilmayotgan Podlarga tugun so‘rash',()=>{s.nodeDProvisioning=true;return'Bo‘sh mos tugun yo‘q. Node D uchun resurs ajratish so‘raldi.';}),
+      row('Infrastruktura','Node D tayyorligi',()=>{s.nodeDProvisioning=false;s.nodeD=true;return'Yangi Node D tayyor.';}),
+      row('Scheduler','Yangi Podlarni joylashtirish',()=>{s.pods.filter(p=>p.state==='pending').forEach(p=>{p.node='D';p.state='starting';});return'Yangi Pod Node D ga biriktirildi; ilova hali tayyorlanmoqda. Qolgan ikki nusxa ishlayapti.';}),
+      row('Kubelet','Ilovani xizmatga tayyorlash',()=>{s.pods.forEach(p=>p.state='ready');return'Startup va readiness muvaffaqiyatli: yana uchta Ready nusxa. Qolgan ikki nusxa bu misoldagi 180 so‘rov/s yuklamani ko‘tara oldi.';})
+    ];
+    if(type==='maintenance')return[
+      row('PDB va Eviction API','Birinchi sog‘lom Podni chiqarish',()=>{replaceFirst();return'3 Ready − 1 ≥ 2: chiqarishga ruxsat berildi. Almashtiruvchi yangi Pod yaratildi, u hali Pending.';}),
+      row('PDB va Eviction API','Ikkinchi sog‘lom Podni chiqarishga urinish',()=> 'Hozir 2 Ready. 2 − 1 < 2: chiqarish rad etildi. Tayyor nusxa paydo bo‘lishi kutiladi.'),
+      row('Scheduler','Yangi Podni bo‘sh joyga biriktirish',()=>{s.pods.filter(p=>p.state==='pending').forEach(p=>{p.node='A';p.state='starting';});return'Bu ssenariy Pod evictionini ko‘rsatadi, butun node drainini emas. Node A mavjud va chiqarilgan Pod o‘rnida joy bor.';}),
+      row('Kubelet','Yangi Podning Ready bo‘lishi',()=>{s.pods.forEach(p=>{if(p.state==='starting')p.state='ready';});return'Yana 3 Ready. Keyingi sog‘lom Podni chiqarish uchun budjet mavjud.';}),
+      row('PDB va Eviction API','Keyingi chiqarish',()=>{replaceFirst();return'Navbatdagi eviction ruxsat etildi. PDB tekshiruvni har chiqarishda takrorlaydi; yangi nusxa yana tayyor bo‘lishi kerak.';})
+    ];
+    return[
+      row('Infrastruktura','Umumiy bazaning uzilishi',()=>{s.db=false;return'Yagona baza ishlamay qoldi. Veb-Podlar Ready, ammo foydalanuvchi amali bajarilmayapti.';}),
+      row('Kubelet','Faqat bazaga bog‘langan liveness oqibatini kuzatish',()=>{s.pods.forEach(p=>{p.state='starting';p.restart++;});return'Noto‘g‘ri liveness dizayni konteynerlarni restart qildi. Baza nosozligi tuzalmadi.';}),
+      row('Kubelet','Konteynerlarning qayta ishga tushishi',()=>{s.pods.forEach(p=>p.state='ready');return'Konteynerlar qayta ishga tushdi, lekin umumiy baza hanuz o‘chiq. Restartlar tashqi nosozlikni bartaraf qilmadi.';}),
+      row('Operator','Baza sababini bartaraf qilish',()=>{s.db=true;return'Baza xizmati tiklandi. Foydalanuvchi amallari yana bajarilmoqda. Saqlash va baza mavjudligi alohida tashkil qilinadi.';})
+    ];}
+    function ready(){return s.pods.filter(p=>p.state==='ready'||p.state==='ready-fault'||p.state==='hung').length;}
+    function successful(){const useful=s.pods.filter(p=>p.state==='ready').length;const routed=ready();return s.db&&routed?Math.round(Math.min(s.requests/routed,100)*useful):0;}
+    function render(){q('[data-metrics]').innerHTML=metric(s.desired,'Kerakli replikalar')+metric(ready()+'/'+s.pods.length,'Ready / yaratilgan Podlar')+metric(successful()+'/'+s.requests,'Bajarilgan so‘rov/s');q('[data-scene]').innerHTML=`<div class="node-grid">${['A','B','C','D'].map(n=>`<div class="node"><div class="node-head">Node ${n} · ${n==='A'?(s.nodeA?'Tayyor':'O‘chiq'):n!=='D'?'Tayyor':s.nodeD?'Tayyor':s.nodeDProvisioning?'Ajratilmoqda':'Hali yo‘q'}</div><div class="pod-list">${s.pods.filter(p=>p.node===n).map(p=>`<div class="pod ${p.state==='ready'?'ready':p.state==='starting'?'starting':p.state==='failed'?'failed':p.state==='ready-fault'||p.state==='hung'?'starting':'pending'}"><strong>Pod ${p.id}</strong><span>${({ready:'Ready',starting:'Tayyorlanmoqda',failed:'Mavjud emas',unready:'Ready emas',hung:'Qotgan · hali Ready belgisi bor','ready-fault':'Readiness xatolari kutilmoqda'})[p.state]||p.state}</span><small>UID: portal-${p.id} · restart ${p.restart}</small></div>`).join('')||'<span class="note">Pod yo‘q</span>'}</div></div>`).join('')}<div class="node"><div class="node-head">Joylashtirishni kutmoqda</div><div class="pod-list">${s.pods.filter(p=>!p.node).map(p=>`<div class="pod pending"><strong>Pod ${p.id}</strong><span>Pending</span></div>`).join('')||'<span class="note">Kutilayotgan Pod yo‘q</span>'}</div></div></div><p class="note">CPU metrikasi: ${s.cpu}% · Baza: ${s.db?'ishlayapti':'o‘chiq'} · PDB: kamida 2 Ready</p>`;q('[data-status]').textContent=s.message;q('[data-log]').innerHTML=logs(s.log);q('[data-next]').textContent=s.index<steps.length?`Keyingi vazifa (${s.index+1}/${steps.length}): ${steps[s.index].label}. Avval bajaruvchini taxmin qiling.`:'Ssenariy tugadi. Boshqa hodisani tanlab, mexanizmlarni solishtiring.';q('[data-step]').disabled=s.index>=steps.length;}
+    q('[data-story]').addEventListener('change',reset);q('[data-reset]').addEventListener('click',reset);q('[data-step]').addEventListener('click',()=>{if(s.index>=steps.length)return;const step=steps[s.index],guess=q('[data-guess]').value;const text=step.run();s.message=(guess?(guess===step.actor?'Taxmin to‘g‘ri. ':'Bu qadamda bajaruvchi: '+step.actor+'. '):'Bajaruvchi: '+step.actor+'. ')+text;s.log.push((s.index+1)+'. '+step.actor+' → '+text);s.index++;q('[data-guess]').value='';render();});stateGetter(root,()=>({...s,ready:ready(),success:successful(),nextActor:s.index<steps.length?steps[s.index].actor:null}));reset();
+  };
+})();
+
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  if (!slides.length) return;
+  const reader = window.M13Reader || {key:'m13-reader-preferences-v1',theme:'light',scale:1,explicitTheme:false};
+  const themeButton = $('theme-toggle');
+  const sizeDown = $('font-decrease');
+  const sizeUp = $('font-increase');
+  const sizeReset = $('font-reset');
+  const sizeStatus = $('font-size-status');
+  const previous = $('prev-slide');
+  const next = $('next-slide');
+  const picker = $('slide-picker');
+  const counter = $('slide-counter');
+  const progress = $('deck-progress');
+  const status = $('deck-status');
+  const overviewButton = $('overview-toggle');
+  const overview = $('overview-dialog');
+  const notesButton = $('notes-toggle');
+  const fullscreenButton = $('fullscreen-toggle');
+  const toolbar = $('deck-toolbar');
+  const mounts = {scaling:'mountScaling',hpa:'mountHpa',nodes:'mountNodes',probes:'mountProbes',recovery:'mountRecovery',pdb:'mountPdb',ha:'mountHa',scenario:'mountScenario'};
+  let active = -1;
+  let showNotes = false;
+  const failures = [];
+
+  function measureToolbar() {
+    if (toolbar) document.documentElement.style.setProperty('--deck-header-height',Math.ceil(toolbar.getBoundingClientRect().height)+'px');
+  }
+
+  function applyReader(save=false) {
+    document.documentElement.dataset.theme=reader.theme;
+    document.documentElement.style.setProperty('--text-scale',String(reader.scale));
+    const dark=reader.theme==='dark';
+    if(themeButton){themeButton.setAttribute('aria-pressed',String(dark));themeButton.setAttribute('aria-label',dark?'Kunduzgi rejimga o‘tish':'Tungi rejimga o‘tish');themeButton.innerHTML=`<span aria-hidden="true">${dark?'☀':'☾'}</span> ${dark?'Kunduzgi rejim':'Tungi rejim'}`;}
+    if(sizeReset)sizeReset.textContent=Math.round(reader.scale*100)+'%';
+    if(sizeDown)sizeDown.disabled=reader.scale<=0.8;
+    if(sizeUp)sizeUp.disabled=reader.scale>=1.4;
+    if(sizeStatus)sizeStatus.textContent=`Matn hajmi ${Math.round(reader.scale*100)} foiz`;
+    if(save){try{localStorage.setItem(reader.key,JSON.stringify({theme:reader.explicitTheme?reader.theme:null,scale:reader.scale}));}catch(_) {}}
+    measureToolbar();
+  }
+  function resizeText(delta){reader.scale=Math.round(Math.min(1.4,Math.max(0.8,reader.scale+delta))*10)/10;applyReader(true);}
+  themeButton?.addEventListener('click',()=>{reader.theme=reader.theme==='dark'?'light':'dark';reader.explicitTheme=true;applyReader(true);});
+  sizeDown?.addEventListener('click',()=>resizeText(-0.1));
+  sizeUp?.addEventListener('click',()=>resizeText(0.1));
+  sizeReset?.addEventListener('click',()=>{reader.scale=1;applyReader(true);});
+  const systemTheme=matchMedia('(prefers-color-scheme: dark)');
+  systemTheme.addEventListener('change',event=>{if(!reader.explicitTheme){reader.theme=event.matches?'dark':'light';applyReader();}});
+
+  function pauseRoots(scope=document){scope.querySelectorAll('[data-demo][data-ready="true"]').forEach(root=>root._pause?.());}
+  function mountDemo(root){
+    if(root.dataset.ready==='true'||root.dataset.ready==='error')return;
+    const key=root.dataset.demo;
+    try{
+      const fn=window.M13?.[mounts[key]];
+      if(typeof fn!=='function')throw new Error('Missing presentation demo '+key);
+      fn(root);
+      root.querySelectorAll('.task').forEach(task=>task.remove());
+      root.dataset.ready='true';
+    }catch(error){
+      failures.push(String(error));
+      root.dataset.ready='error';
+      const message=document.createElement('p');message.className='status';message.setAttribute('role','alert');message.textContent='Namoyish ishga tushmadi. Sahifani qayta ochib ko‘ring.';root.replaceChildren(message);
+      console.error(error);
+    }
+  }
+  function mountSlide(slide){slide.querySelectorAll('[data-demo]').forEach(mountDemo);}
+  function titleOf(slide){return slide.dataset.title||slide.querySelector('h1,h2,h3')?.textContent||slide.id;}
+  function syncNotes(){
+    document.body.classList.toggle('notes-visible',showNotes);
+    slides.forEach((slide,index)=>slide.querySelectorAll('.speaker-notes').forEach(note=>{note.hidden=!showNotes||index!==active;}));
+    if(notesButton){notesButton.setAttribute('aria-pressed',String(showNotes));notesButton.textContent=showNotes?'Izohlarni yashirish':'O‘qituvchi izohi';}
+  }
+  function writeHash(slide){
+    const hash='#'+slide.id;
+    if(location.hash===hash)return;
+    try{history.replaceState(null,'',hash);}catch(_){location.hash=slide.id;}
+  }
+  function showSlide(index,{hash=true,scroll=true}={}){
+    index=Math.max(0,Math.min(slides.length-1,index));
+    if(active!==index&&active>=0)pauseRoots(slides[active]);
+    active=index;
+    slides.forEach((slide,i)=>{slide.hidden=i!==index;slide.classList.toggle('is-active',i===index);slide.setAttribute('aria-hidden',String(i!==index));});
+    mountSlide(slides[index]);
+    if(scroll){const scroller=slides[index].querySelector('.slide-scroll')||(slides[index].classList.contains('slide-scroll')?slides[index]:null);if(scroller)scroller.scrollTop=0;}
+    if(previous)previous.disabled=index===0;
+    if(next)next.disabled=index===slides.length-1;
+    if(counter)counter.textContent=`${String(index+1).padStart(2,'0')} / ${slides.length}`;
+    if(picker){picker.value=slides[index].id;Array.from(picker.options).forEach(option=>{if(option.value===slides[index].id)option.setAttribute('aria-current','true');else option.removeAttribute('aria-current');});}
+    if(progress){progress.style.width=((index+1)/slides.length*100)+'%';progress.setAttribute('aria-valuenow',String(index+1));progress.setAttribute('aria-valuemax',String(slides.length));}
+    if(status)status.textContent=`${index+1}-slayd. ${titleOf(slides[index])}`;
+    overview?.querySelectorAll('[data-jump]').forEach(button=>{const current=button.dataset.jump===slides[index].id;button.classList.toggle('is-current',current);if(current)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current');});
+    syncNotes();
+    if(hash)writeHash(slides[index]);
+    measureToolbar();
+  }
+  function indexFromHash(){let value='';try{value=decodeURIComponent(location.hash.slice(1));}catch(_){}return slides.findIndex(slide=>slide.id===value);}
+  previous?.addEventListener('click',()=>showSlide(active-1));
+  next?.addEventListener('click',()=>showSlide(active+1));
+  picker?.addEventListener('change',event=>{const index=slides.findIndex(slide=>slide.id===event.target.value);if(index>=0)showSlide(index);});
+  addEventListener('hashchange',()=>{const index=indexFromHash();if(index>=0&&index!==active)showSlide(index,{hash:false});});
+  notesButton?.addEventListener('click',()=>{showNotes=!showNotes;syncNotes();});
+
+  function closeOverview(){
+    if(!overview)return;
+    if(typeof overview.close==='function'&&overview.open)overview.close();else overview.hidden=true;
+    overviewButton?.setAttribute('aria-expanded','false');
+    overviewButton?.focus();
+  }
+  overviewButton?.addEventListener('click',()=>{
+    if(!overview)return;
+    pauseRoots(slides[active]);
+    overview.hidden=false;
+    if(typeof overview.showModal==='function'&&!overview.open)overview.showModal();
+    overviewButton.setAttribute('aria-expanded','true');
+    (overview.querySelector('[data-jump="'+slides[active].id+'"]')||overview.querySelector('button'))?.focus();
+  });
+  overview?.addEventListener('click',event=>{
+    const jump=event.target.closest('[data-jump]');
+    if(jump){const index=slides.findIndex(slide=>slide.id===jump.dataset.jump);if(index>=0)showSlide(index);closeOverview();return;}
+    if(event.target.closest('[data-close-overview]')||event.target===overview)closeOverview();
+  });
+  overview?.addEventListener('close',()=>{overviewButton?.setAttribute('aria-expanded','false');overviewButton?.focus();});
+  overview?.addEventListener('cancel',()=>{overviewButton?.setAttribute('aria-expanded','false');});
+
+  function syncFullscreen(){
+    const isFull=Boolean(document.fullscreenElement);
+    if(fullscreenButton){fullscreenButton.setAttribute('aria-pressed',String(isFull));fullscreenButton.textContent=isFull?'To‘liq ekrandan chiqish':'To‘liq ekran';}
+    measureToolbar();
+  }
+  async function toggleFullscreen(){
+    try{
+      if(document.fullscreenElement){await document.exitFullscreen();}
+      else if(document.documentElement.requestFullscreen){await document.documentElement.requestFullscreen();}
+      else if(status)status.textContent='Bu brauzer to‘liq ekran rejimini qo‘llamayapti. Brauzerning to‘liq ekran buyrug‘idan foydalaning.';
+    }catch(_){if(status)status.textContent='To‘liq ekran rejimi ochilmadi. Brauzerning to‘liq ekran buyrug‘idan foydalaning.';}
+    syncFullscreen();
+  }
+  fullscreenButton?.addEventListener('click',toggleFullscreen);
+  document.addEventListener('fullscreenchange',syncFullscreen);
+  $('print-deck')?.addEventListener('click',()=>{pauseRoots();slides.forEach(mountSlide);window.print();});
+  addEventListener('beforeprint',()=>{pauseRoots();slides.forEach(mountSlide);});
+  addEventListener('afterprint',()=>showSlide(active,{hash:false,scroll:false}));
+
+  document.addEventListener('keydown',event=>{
+    if(event.defaultPrevented||event.altKey||event.ctrlKey||event.metaKey)return;
+    if(overview?.open){if(event.key==='Escape'){event.preventDefault();closeOverview();}return;}
+    const target=event.target;
+    if(target instanceof Element&&target.closest('input,textarea,select,[contenteditable="true"],[data-demo],dialog'))return;
+    const key=event.key;
+    const space=key===' '||key==='Spacebar';
+    if(space&&target instanceof Element&&target.closest('button,a'))return;
+    let destination=null;
+    if(key==='ArrowRight'||key==='PageDown'||(space&&!event.shiftKey))destination=active+1;
+    else if(key==='ArrowLeft'||key==='PageUp'||(space&&event.shiftKey))destination=active-1;
+    else if(key==='Home')destination=0;
+    else if(key==='End')destination=slides.length-1;
+    if(destination!==null){event.preventDefault();showSlide(destination);}
+  });
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseRoots();});
+  let observer;
+  if(toolbar&&typeof ResizeObserver!=='undefined'){observer=new ResizeObserver(measureToolbar);observer.observe(toolbar);}
+  addEventListener('resize',measureToolbar);
+  addEventListener('pagehide',()=>{document.querySelectorAll('[data-demo]').forEach(root=>root._cleanup?.());observer?.disconnect();});
+  window.M13Deck={get index(){return active;},get currentId(){return slides[active]?.id;},get count(){return slides.length;},get errors(){return failures.slice();},goTo:id=>{const index=slides.findIndex(slide=>slide.id===id);if(index>=0)showSlide(index);}};
+  applyReader();
+  syncFullscreen();
+  const initial=indexFromHash();
+  showSlide(initial>=0?initial:0);
+})();
+</script></body></html>
